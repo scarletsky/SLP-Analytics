@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Hello World!</title>
+    <script src="./components/jquery/dist/jquery.min.js"></script>
+    <script src="./components/less/dist/less-1.7.0.min.js"></script>
+    <script src="./scripts/main.js"></script>
+  </head>
+  <body>
+    <h1>Hello World!</h1>
+    We are using node.js 
+
+    <script>
+        var Gaze = require('gaze').Gaze;
+        var gaze = new Gaze('**/*');
+
+        gaze.on('all', function (event, filepath) {
+            if (location) {
+                location.reload();
+            }
+        });
+    </script>
+  </body>
+</html>
+
