@@ -125,11 +125,21 @@ emitter.on('routeChange', function (route, actionType) {
         // 工艺路线列表
         case 'craft':
             $('#manageFactory #factoryName').text(slp.factory.name);
-            db.all('SELECT * from Craft WHERE factory_id = $factoryId', {
+            db.all('SELECT ' + 
+                       'Craft.id, Craft.part_id, Part.name, Craft.route, Craft.carrying, Craft.remark ' + 
+                   'FROM ' + 
+                       'Craft ' + 
+                   'INNER JOIN ' + 
+                       'Part ' + 
+                   'ON ' + 
+                       'Craft.factory_id = Part.factory_id AND ' + 
+                       'Craft.part_id = Part.id AND '+ 
+                       'Craft.factory_id = $factoryId', {
                 $factoryId: slp.factory.id
             }, function (err, row) {
+                console.log(row);
                 $.each(row, function (i, obj) {
-                    var tr = tpls.craft(obj.id, obj.part_id, obj.route, obj.carrying, obj.remark);
+                    var tr = tpls.craft(obj.id, obj.part_id, obj.name, obj.route, obj.carrying, obj.remark);
                     rows.push(tr);
                 });
 
@@ -138,19 +148,32 @@ emitter.on('routeChange', function (route, actionType) {
 
             break;
 
+        // 编辑工艺路线
         case 'editCraft':
-            if (actionType === 'edit') {
-                $('#editCraft input[name="action"]').val('edit');
-                $('#editCraft input[name="factoryId"]').val(slp.factory.id);
-                $('#editCraft input[name="id"]').val(slp.craft.id);
-                $('#editCraft input[name="partId"]').val(slp.craft.part_id);
-                $('#editCraft input[name="route"]').val(slp.craft.route);
-                $('#editCraft input[name="carrying"]').val(slp.craft.carrying);
-                $('#editCraft textarea[name="remark"]').val(slp.craft.remark);
-            } else {
-                $('#editCraft input[name="action"]').val('add');
-                $('#editCraft input[name="factoryId"]').val(slp.factory.id);
-            }
+            var options = [];
+            db.all('SELECT * FROM Part WHERE factory_id = $factoryId', {
+                $factoryId: slp.factory.id
+            }, function (err, row) {
+                $.each(row, function (i, obj) {
+                    var option = tpls.craftPartOption(obj.id, obj.name);
+                    options.push(option);
+                });
+
+                $('#editCraft select').html(options);
+
+                if (actionType === 'edit') {
+                    $('#editCraft input[name="action"]').val('edit');
+                    $('#editCraft input[name="factoryId"]').val(slp.factory.id);
+                    $('#editCraft input[name="id"]').val(slp.craft.id);
+                    $('#editCraft select[name="partId"]').val(slp.craft.part_id);
+                    $('#editCraft input[name="route"]').val(slp.craft.route);
+                    $('#editCraft input[name="carrying"]').val(slp.craft.carrying);
+                    $('#editCraft textarea[name="remark"]').val(slp.craft.remark);
+                } else {
+                    $('#editCraft input[name="action"]').val('add');
+                    $('#editCraft input[name="factoryId"]').val(slp.factory.id);
+                }
+            });
             break;
         }
     });

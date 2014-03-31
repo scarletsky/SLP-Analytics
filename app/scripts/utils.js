@@ -12,7 +12,7 @@ module.exports = function ($) {
 
     function getFormData(formId) {
         var data = {};
-        var fields = $(formId + ' input, ' + formId + ' textarea');
+        var fields = $(formId + ' input, ' + formId + ' textarea, ' + formId + ' select');
 
         $.each(fields, function (i, field) {
             // dom object to jQuery object

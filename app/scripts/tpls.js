@@ -68,11 +68,12 @@ var part = function (id, code, name, remark) {
     return html.join('');
 }
 
-var craft = function (id, part_id, route, carrying, remark) {
+var craft = function (id, part_id, name, route, carrying, remark) {
     var html = [
         '<tr data-klass="craft">' +
             '<td class="text-center" data-klass="id">' + id + '</td>',
             '<td class="text-center" data-klass="part_id">' + part_id + '</td>',
+            '<td class="text-center" data-klass="name">' + name + '</td>',
             '<td class="text-center" data-klass="route">' + route + '</td>',
             '<td class="text-center" data-klass="carrying">' + carrying + '</td>',
             '<td class="text-center" data-klass="remark">' + remark + '</td>',
@@ -91,7 +92,12 @@ var craft = function (id, part_id, route, carrying, remark) {
     return html.join('');
 }
 
+var craftPartOption = function (id, name) {
+    return '<option value=\"' + id + '\">' + name + '</option>'
+}
+
 exports.factory = factory;
 exports.unit = unit;
 exports.part = part;
 exports.craft = craft;
+exports.craftPartOption = craftPartOption;
