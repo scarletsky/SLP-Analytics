@@ -16,23 +16,22 @@
         </ul>
         <h3 class="text-muted" id="factoryName"></h3>
     </div>
-</div>
 
-<div class="jumbotron">
-    <h2>SLP分析</h2>
-    <p class="lead">
-        物流分析: 从至表 -> 物流强度 -> 物流相关表
-    </p>
-    <p class="lead">
-        非物流分析: 非物流相关表
-    </p>
-    <p>
-        注意：你必须填写相关资料才能进行分析。
-    </p>
-    <p>
-        <button class="btn btn-lg btn-success" disabled role="button">物流分析</button>
-        <button class="btn btn-lg btn-success" disabled role="button">非物流分析</button>
-    </p>
-</div>
+    <div class="jumbotron">
+        <h2>SLP分析</h2>
+        <p class="lead">
+            物流分析: 从至表 -> 物流强度 -> 物流相关表
+        </p>
+        <p class="lead">
+            非物流分析: 非物流相关表
+        </p>
+        <p>
+            注意：你必须填写相关资料才能进行分析。
+        </p>
+        <p>
+            <a class="btn btn-lg btn-success disabled" id="flowBtn" data-route="fromToTable">物流分析</a>
+        </p>
+    </div>
 
-<button class="btn btn-default" data-route="factory">返回</button>
+    <button class="btn btn-default" data-route="factory">返回</button>
+</div>

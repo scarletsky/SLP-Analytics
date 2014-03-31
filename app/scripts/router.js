@@ -1,9 +1,11 @@
 var events = require('events');
+var eventProxy = require('eventproxy');
 var db = require('../scripts/db');
 var tpls = require('../scripts/tpls');
 var utils = require('../scripts/utils')(jQuery);
 
 var emitter = new events.EventEmitter();
+var ep = new eventProxy();
 
 $(document).ready(function () {
 
@@ -57,6 +59,27 @@ emitter.on('routeChange', function (route, actionType) {
         // 管理工厂
         case 'manageFactory':
             $('#manageFactory #factoryName').text(slp.factory.name);
+            db.all('SELECT * FROM Unit WHERE factory_id = $factoryId', {
+                $factoryId: slp.factory.id
+            }, ep.done('getUnits'));
+
+            db.all('SELECT * FROM Part WHERE factory_id = $factoryId', {
+                $factoryId: slp.factory.id
+            }, ep.done('getParts'));
+
+            db.all('SELECT * FROM Craft WHERE factory_id = $factoryId', {
+                $factoryId: slp.factory.id
+            }, ep.done('getCrafts'));
+
+            ep.all('getUnits', 'getParts', 'getCrafts', function (units, parts, crafts) {
+                slp.units = units;
+                slp.parts = parts;
+                slp.crafts = crafts;
+
+                if (units.length && parts.length && crafts.length) {
+                    $('#manageFactory #flowBtn').removeClass('disabled');
+                }
+            });
 
             break;
 
@@ -137,7 +160,6 @@ emitter.on('routeChange', function (route, actionType) {
                        'Craft.factory_id = $factoryId', {
                 $factoryId: slp.factory.id
             }, function (err, row) {
-                console.log(row);
                 $.each(row, function (i, obj) {
                     var tr = tpls.craft(obj.id, obj.part_id, obj.name, obj.route, obj.carrying, obj.remark);
                     rows.push(tr);
@@ -174,6 +196,10 @@ emitter.on('routeChange', function (route, actionType) {
                     $('#editCraft input[name="factoryId"]').val(slp.factory.id);
                 }
             });
+            break;
+
+        // 从至表
+        case 'fromToTable':
             break;
         }
     });
