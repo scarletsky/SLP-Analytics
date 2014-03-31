@@ -1,8 +1,11 @@
-var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('/Users/scarlex/Projects/SLP-Analytics/app/db/data.db');
+/* 即时更新 */
+var Gaze = require('gaze').Gaze;
+var gaze = new Gaze('**/*');
 
-db.each("SELECT rowid AS id, info FROM lorem", function(err, row) {
-  console.log(row.id + ": " + row.info);
+gaze.on('all', function (event, filepath) {
+    if (location) {
+        location.reload();
+    }
 });
 
-db.close();
+window.slp = {};

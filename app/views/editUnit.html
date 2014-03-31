@@ -1,0 +1,44 @@
+<form id="editUnit" role="form" action="">
+    <input type="hidden" name="id">
+    <input type="hidden" name="factoryId">
+    <input type="hidden" name="action">
+    <div class="form-group">
+        <label for="num">作业单位序号</label>
+        <input class="form-control"
+               id="num"
+               type="text"
+               name="num"
+               placeholder="请输入作业单位的序号，如1，2，3等">
+    </div>
+
+    <div class="form-group">
+        <label for="name">作业单位名字</label>
+        <input class="form-control"
+               id="name"
+               type="text"
+               name="name"
+               placeholder="请输入作业单位的名字">
+    </div>
+
+    <div class="form-group">
+        <label for="usage">作业单位用途</label>
+        <input class="form-control"
+               id="usage"
+               type="text"
+               name="usage"
+               placeholder="请输入作业单位的名字">
+    </div>
+
+    <div class="form-group">
+        <label for="remark">备注</label>
+        <textarea class="form-control"
+                  id="remark"
+                  name="remark"
+                  rows="3"
+                  placeholder="请输入作业单位的备注"></textarea>
+    </div>
+
+    <button class="btn btn-primary" id="editUnitBtn">添加作业单位</button>
+    <button class="btn btn-default" data-route="unit">返回</button>
+</form>
+

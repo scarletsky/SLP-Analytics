@@ -1,6 +1,6 @@
 {
     "name": "SLP-Analytics",
-    "main": "index.html",
+    "main": "./views/index.html",
     "version": "0.0.1",
     "keywords": ["slp"],
     "window": {

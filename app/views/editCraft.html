@@ -1,0 +1,44 @@
+<form id="editCraft" role="form" action="">
+    <input type="hidden" name="id">
+    <input type="hidden" name="factoryId">
+    <input type="hidden" name="action">
+    <div class="form-group">
+        <label for="partId">零件id</label>
+        <input class="form-control"
+               id="partId"
+               type="text"
+               name="partId"
+               placeholder="请输入零件id">
+    </div>
+
+    <div class="form-group">
+        <label for="route">工艺路线</label>
+        <input class="form-control"
+               id="route"
+               type="text"
+               name="route"
+               placeholder="请参照作业单位表输入工艺路线, 以逗号分割，如1,2,3,4,5">
+    </div>
+
+    <div class="form-group">
+        <label for="carrying">搬运量</label>
+        <input class="form-control"
+               id="carrying"
+               type="text"
+               name="carrying"
+               placeholder="请输入搬运量, 格式为浮点数">
+    </div>
+
+    <div class="form-group">
+        <label for="remark">备注</label>
+        <textarea class="form-control"
+                  id="remark"
+                  name="remark"
+                  rows="3"
+                  placeholder="请输入零件备注"></textarea>
+    </div>
+
+    <button class="btn btn-primary" id="editCraftBtn">添加零件</button>
+    <button class="btn btn-default" data-route="craft">返回</button>
+</form>
+
