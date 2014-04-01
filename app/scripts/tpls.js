@@ -1,3 +1,5 @@
+var $ = require('jquery');
+
 var factory = function (id, name, remark) {
     var html = [
         '<tr data-klass="factory">' +
@@ -96,8 +98,43 @@ var craftPartOption = function (id, name) {
     return '<option value=\"' + id + '\">' + name + '</option>'
 }
 
+var thead = function (units) {
+    var cols = '';
+    var html = [
+        '<tr>',
+            '<th></th>',
+        '</tr>'
+    ];
+
+    $.each(units, function (i, unit) {
+        cols += '<th>' + unit.name + '</th>'
+    });
+    html[2] = cols;
+
+    return html.join('');
+}
+
+var tbody = function (units) {
+    var html;
+
+    $.each(units, function (i, unit) {
+        html += '<tr><td>' + unit.name + '</td>';
+
+        $.each(units, function (j, unit) {
+            html += '<td id=\"' + (i + 1) + '-' + (j + 1) + '\">' + 0 + '</td>';
+        });
+
+        html += '</tr>';
+    });
+
+    return html;
+
+}
+
 exports.factory = factory;
 exports.unit = unit;
 exports.part = part;
 exports.craft = craft;
 exports.craftPartOption = craftPartOption;
+exports.thead = thead;
+exports.tbody = tbody;

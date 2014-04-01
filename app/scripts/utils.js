@@ -23,9 +23,27 @@ module.exports = function ($) {
         return data;
     }
 
+    function setTableData(crafts) {
+        $.each(crafts, function (i, craft) {
+            var route = craft.route.split(',');
+            var routeLength = route.length;
+
+            $.each(route, function (j, r) {
+                if (routeLength !== j + 1) {
+                    var fromId = route[j];
+                    var toId = route[j + 1];
+                    var tdId = fromId + '-' + toId;
+                    var tdNum = parseFloat($('table td#' + tdId).text());
+                    $('table td#' + tdId).text(tdNum + craft.carrying);
+                }
+            });
+        });
+    }
+
     return {
         getRowData: getRowData,
-        getFormData: getFormData
+        getFormData: getFormData,
+        setTableData: setTableData
     };
 }
 

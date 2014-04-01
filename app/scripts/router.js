@@ -200,6 +200,13 @@ emitter.on('routeChange', function (route, actionType) {
 
         // 从至表
         case 'fromToTable':
+            var thead = tpls.thead(slp.units);
+            var tbody = tpls.tbody(slp.units);
+            $('#fromToTable table thead').html(thead);
+            $('#fromToTable table tbody').html(tbody);
+
+            utils.setTableData(slp.crafts);
+
             break;
         }
     });
