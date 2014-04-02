@@ -6,7 +6,6 @@
     "grunt-node-webkit-builder": "~0.1.8",
     "grunt-contrib-clean": "^0.5.0",
     "gaze": "^0.5.1",
-    "sqlite3": "^2.1.7",
     "eventproxy": "^0.3.1",
     "jquery": "^2.1.0"
   }

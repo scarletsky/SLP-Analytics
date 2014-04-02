@@ -30,12 +30,22 @@ CREATE TABLE Craft(
     remark TEXT
 );
 
-INSERT INTO Factory(name, remark) VALUES('Hello', 'world');
-INSERT INTO Factory(name, remark) VALUES('Oh', 'my god');
+INSERT INTO Factory(name, remark) VALUES('工厂1', '测试工厂');
 
-INSERT INTO Unit(factory_id, name, num, usage, remark) VALUES('1', 'what', '1', 'useeee', 'help me!');
-INSERT INTO Unit(factory_id, name, num, usage, remark) VALUES('1', 'hahah', '2', 'fff', 'mabi');
+INSERT INTO Unit(factory_id, name, num, usage, remark) VALUES('1', '作业单位1', '1', '测试单位1', '测试');
+INSERT INTO Unit(factory_id, name, num, usage, remark) VALUES('1', '作业单位2', '2', '测试单位2', '测试');
+INSERT INTO Unit(factory_id, name, num, usage, remark) VALUES('1', '作业单位3', '3', '测试单位3', '测试');
+INSERT INTO Unit(factory_id, name, num, usage, remark) VALUES('1', '作业单位4', '4', '测试单位4', '测试');
 
-INSERT INTO Unit(factory_id, name, num, usage, remark) VALUES('2', 'second', '1', 'xxx', 'vaaaaa');
-INSERT INTO Unit(factory_id, name, num, usage, remark) VALUES('2', 'second', '2', 'yyy', 'buuuuu');
+INSERT INTO Part(factory_id, name, code, remark) VALUES('1', '零件1', 'LJ1', '测试零件');
+INSERT INTO Part(factory_id, name, code, remark) VALUES('1', '零件2', 'LJ2', '测试零件');
+INSERT INTO Part(factory_id, name, code, remark) VALUES('1', '零件3', 'LJ3', '测试零件');
+INSERT INTO Part(factory_id, name, code, remark) VALUES('1', '零件4', 'LJ4', '测试零件');
+
+INSERT INTO Craft(factory_id, part_id, route, carrying, remark) VALUES('1', '1', '1,2,3,4', 10.5, '测试');
+INSERT INTO Craft(factory_id, part_id, route, carrying, remark) VALUES('1', '2', '2,1,4', 20, '测试');
+INSERT INTO Craft(factory_id, part_id, route, carrying, remark) VALUES('1', '3', '1,3,4', 41, '测试');
+INSERT INTO Craft(factory_id, part_id, route, carrying, remark) VALUES('1', '4', '3,4', 3.3, '测试');
+
+
 
