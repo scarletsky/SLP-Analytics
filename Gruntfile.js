@@ -1,6 +1,6 @@
 module.exports = function(grunt) {
 
- grunt.initConfig({
+grunt.initConfig({
     clean: {
         build: {
             src: './build/releases'
