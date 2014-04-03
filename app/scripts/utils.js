@@ -1,4 +1,4 @@
-module.exports = function ($) {
+module.exports = function ($, _) {
 
     function getRowData(row) {
         var data = {};
@@ -23,7 +23,20 @@ module.exports = function ($) {
         return data;
     }
 
-    function setTableData(crafts) {
+    function getFromToTableData() {
+        var data = [];
+        var tds = $('#fromToTable table td[id]');
+        $.each(tds, function (i, td) {
+            var obj = {};
+            obj.id = $(td).attr('id');
+            obj.intension = parseFloat($(td).text());
+            data.push(obj);
+        });
+
+        return data;
+    }
+
+    function setFromToTableData(crafts) {
         $.each(crafts, function (i, craft) {
             var route = craft.route.split(',');
             var routeLength = route.length;
@@ -40,10 +53,35 @@ module.exports = function ($) {
         });
     }
 
+    function getFlowIntesion(inputData) {
+        var data = [];
+        $.each(inputData, function (i, d) {
+            var obj = {};
+
+            if (parseFloat(d.intension) !== 0) {
+                var sepId = d.id.split('-');
+
+                if (parseInt(sepId[0]) < parseInt(sepId[1])) {
+                    obj.id = d.id;
+                    obj.intension = d.intension;
+                    data.push(obj);
+                } else {
+                    var reverseId = sepId[1] + '-' + sepId[0];
+                    var target = _.find(data, {id: reverseId});
+                    target.intension += d.intension;
+                }
+            }
+        });
+
+        return data;
+    }
+
     return {
         getRowData: getRowData,
         getFormData: getFormData,
-        setTableData: setTableData
+        getFromToTableData: getFromToTableData,
+        setFromToTableData: setFromToTableData,
+        getFlowIntesion: getFlowIntesion
     };
 }
 

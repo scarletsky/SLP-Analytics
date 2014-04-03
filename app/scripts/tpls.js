@@ -98,7 +98,7 @@ var craftPartOption = function (id, name) {
     return '<option value=\"' + id + '\">' + name + '</option>'
 }
 
-var thead = function (units) {
+var fromToThead = function (units) {
     var cols = '';
     var html = [
         '<tr>',
@@ -114,7 +114,7 @@ var thead = function (units) {
     return html.join('');
 }
 
-var tbody = function (units) {
+var fromToTbody = function (units) {
     var html;
 
     $.each(units, function (i, unit) {
@@ -128,7 +128,19 @@ var tbody = function (units) {
     });
 
     return html;
+}
 
+var flowIntensionTbody = function (index, id, intension, level) {
+    var html = [
+        '<tr>',
+            '<td>' + index + '</td>',
+            '<td>' + id + '</td>',
+            '<td>' + intension + '</td>',
+            '<td>' + level + '</td>',
+        '</tr>'
+    ];
+
+    return html.join('');
 }
 
 exports.factory = factory;
@@ -136,5 +148,6 @@ exports.unit = unit;
 exports.part = part;
 exports.craft = craft;
 exports.craftPartOption = craftPartOption;
-exports.thead = thead;
-exports.tbody = tbody;
+exports.fromToThead = fromToThead;
+exports.fromToTbody = fromToTbody;
+exports.flowIntensionTbody = flowIntensionTbody;

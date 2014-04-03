@@ -1,8 +1,9 @@
 var events = require('events');
 var eventProxy = require('eventproxy');
+var _ = require('lodash');
 var db = require('../scripts/db');
 var tpls = require('../scripts/tpls');
-var utils = require('../scripts/utils')(jQuery);
+var utils = require('../scripts/utils')(jQuery, _);
 
 var emitter = new events.EventEmitter();
 var ep = new eventProxy();
@@ -200,13 +201,25 @@ emitter.on('routeChange', function (route, actionType) {
 
         // 从至表
         case 'fromToTable':
-            var thead = tpls.thead(slp.units);
-            var tbody = tpls.tbody(slp.units);
+            var thead = tpls.fromToThead(slp.units);
+            var tbody = tpls.fromToTbody(slp.units);
             $('#fromToTable table thead').html(thead);
             $('#fromToTable table tbody').html(tbody);
 
-            utils.setTableData(slp.crafts);
+            utils.setFromToTableData(slp.crafts);
+            slp.fromToTableData = utils.getFromToTableData();
 
+            break;
+
+        case 'flowIntensionTable':
+            var flowIntension = utils.getFlowIntesion(slp.fromToTableData);
+
+            $.each(flowIntension, function (i, obj) {
+                var tr = tpls.flowIntensionTbody(i + 1, obj.id, obj.intension, '?');
+                rows.push(tr);
+            });
+
+            $('#flowIntensionTable table tbody').html(rows);
             break;
         }
     });
