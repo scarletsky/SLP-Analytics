@@ -114,14 +114,15 @@ var fromToThead = function (units) {
     return html.join('');
 }
 
-var fromToTbody = function (units) {
+var fromToTbody = function (units, dataEmpty) {
     var html;
+    var data = dataEmpty ? '' : 0;
 
     $.each(units, function (i, unit) {
         html += '<tr><td>' + unit.name + '</td>';
 
         $.each(units, function (j, unit) {
-            html += '<td id=\"' + (i + 1) + '-' + (j + 1) + '\">' + 0 + '</td>';
+            html += '<td id=\"' + (i + 1) + '-' + (j + 1) + '\">' + data + '</td>';
         });
 
         html += '</tr>';

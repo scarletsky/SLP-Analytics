@@ -222,6 +222,17 @@ emitter.on('routeChange', function (route, actionType) {
 
             $('#flowIntensionTable table tbody').html(rows);
             break;
+
+        // 作业单位相互关系
+        case 'unitRelationTable':
+            var thead = tpls.fromToThead(slp.units);
+            var tbody = tpls.fromToTbody(slp.units, 'dataEmpty');
+            $('#unitRelationTable table thead').html(thead);
+            $('#unitRelationTable table tbody').html(tbody);
+
+            utils.setUnitRelationTableData(slp.flowIntension);
+
+            break;
         }
     });
 });

@@ -53,6 +53,23 @@ module.exports = function ($, _) {
         });
     }
 
+    function setUnitRelationTableData(intension) {
+        $.each(intension, function (i, obj) {
+            $('table td#' + obj.id).text(obj.level);
+        });
+
+        $('#unitRelationTable table td[id]').each(function (i, td) {
+            var tdId = $(td).attr('id');
+            var sepId = tdId.split('-');
+            var fromId = sepId[0];
+            var toId = sepId[1];
+
+            if (parseInt(fromId) < parseInt(toId) && !$(td).text()) {
+                $(td).text('U');
+            }
+        });
+    }
+
     function getFlowIntensionLevel(inputData) {
         var dataLength = inputData.length;
         var aNum = Math.round(dataLength * 0.1);
@@ -121,7 +138,8 @@ module.exports = function ($, _) {
         getFormData: getFormData,
         getFromToTableData: getFromToTableData,
         setFromToTableData: setFromToTableData,
-        getFlowIntesion: getFlowIntesion
+        getFlowIntesion: getFlowIntesion,
+        setUnitRelationTableData: setUnitRelationTableData
     };
 }
 
