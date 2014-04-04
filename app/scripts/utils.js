@@ -53,6 +53,46 @@ module.exports = function ($, _) {
         });
     }
 
+    function getFlowIntensionLevel(inputData) {
+        var dataLength = inputData.length;
+        var aNum = Math.round(dataLength * 0.1);
+        var eNum = Math.round(dataLength * 0.2);
+        var iNum = Math.round(dataLength * 0.3);
+        var oNum = dataLength - aNum - eNum - iNum;
+
+        var levelMap = (function (aNum, eNum, iNum, oNum) {
+            var data = [];
+            data.push({count: aNum, level: 'A'});
+            data.push({count: eNum, level: 'E'});
+            data.push({count: iNum, level: 'I'});
+            data.push({count: oNum, level: 'O'});
+
+            return data;
+        })(aNum, eNum, iNum, oNum);
+
+        var sortByIntension = _.sortBy(inputData, 'intension').reverse();
+        var newSortList = [];
+
+        $.each(levelMap, function (i, lvMap) {
+            var counter = 0;
+
+            for (var j = 0; j <= dataLength; j++) {
+                var newObj = sortByIntension.shift()
+                newObj.level = lvMap.level;
+                newSortList.push(newObj);
+                counter++;
+
+                if (counter === lvMap.count) {
+                    counter = 0;
+                    break;
+                }
+            }
+        });
+
+        return newSortList;
+
+    }
+
     function getFlowIntesion(inputData) {
         var data = [];
         $.each(inputData, function (i, d) {
@@ -73,7 +113,7 @@ module.exports = function ($, _) {
             }
         });
 
-        return data;
+        return getFlowIntensionLevel(data);
     }
 
     return {

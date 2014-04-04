@@ -211,11 +211,12 @@ emitter.on('routeChange', function (route, actionType) {
 
             break;
 
+        // 物流强度表
         case 'flowIntensionTable':
-            var flowIntension = utils.getFlowIntesion(slp.fromToTableData);
+            var flowIntension = slp.flowIntension = utils.getFlowIntesion(slp.fromToTableData);
 
             $.each(flowIntension, function (i, obj) {
-                var tr = tpls.flowIntensionTbody(i + 1, obj.id, obj.intension, '?');
+                var tr = tpls.flowIntensionTbody(i + 1, obj.id, obj.intension, obj.level);
                 rows.push(tr);
             });
 
