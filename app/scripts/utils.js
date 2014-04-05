@@ -125,7 +125,13 @@ module.exports = function ($, _) {
                 } else {
                     var reverseId = sepId[1] + '-' + sepId[0];
                     var target = _.find(data, {id: reverseId});
-                    target.intension += d.intension;
+                    if (target) {
+                        target.intension += d.intension;
+                    } else {
+                        obj.id = reverseId;
+                        obj.intension = d.intension;
+                        data.push(obj);
+                    }
                 }
             }
         });
