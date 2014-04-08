@@ -53,12 +53,28 @@ module.exports = function ($, _) {
         });
     }
 
+    function getUnitRelationTableData() {
+        var data = [];
+        var tds = $('#unitRelationTable table td[id]');
+        $.each(tds, function (i, td) {
+            var obj = {};
+            var td = $(td);
+            if (td.text()) {
+                obj.id = td.attr('id');
+                obj.level = td.text();
+                data.push(obj);
+            }
+        });
+
+        return data;
+    }
+
     function setUnitRelationTableData(intension) {
         $.each(intension, function (i, obj) {
             $('table td#' + obj.id).text(obj.level);
         });
 
-        $('#unitRelationTable table td[id]').each(function (i, td) {
+        $('table td[id]').each(function (i, td) {
             var tdId = $(td).attr('id');
             var sepId = tdId.split('-');
             var fromId = sepId[0];
@@ -94,15 +110,16 @@ module.exports = function ($, _) {
             var counter = 0;
 
             for (var j = 0; j <= dataLength; j++) {
-                var newObj = sortByIntension.shift()
-                newObj.level = lvMap.level;
-                newSortList.push(newObj);
-                counter++;
 
                 if (counter === lvMap.count) {
                     counter = 0;
                     break;
                 }
+
+                var newObj = sortByIntension.shift();
+                newObj.level = lvMap.level;
+                newSortList.push(newObj);
+                counter++;
             }
         });
 
@@ -139,13 +156,93 @@ module.exports = function ($, _) {
         return getFlowIntensionLevel(data);
     }
 
+    function setAnotherData(inputData) {
+        $.each(inputData, function (i, d) {
+            var sepId = d.id.split('-');
+            var reverseId = sepId[1] + '-' + sepId[0];
+            $('table td[id=\"' + reverseId + '\"]').text(d.level);
+        });
+    }
+
+    function getFullRelationData() {
+        var data = [];
+        var tds = $('table td[id]');
+        $.each(tds, function (i, td) {
+            var obj = {};
+            var td = $(td);
+            if (td.text()) {
+                obj.id = td.attr('id');
+                obj.level = td.text();
+                data.push(obj);
+            }
+        });
+
+        return data;
+    }
+
+    function addRelationLevelScore(inputData) {
+        var levelMap = {
+            'A': '4',
+            'E': '3',
+            'I': '2',
+            'O': '1',
+            'U': '0',
+            'X': '-1'
+        };
+
+        $.each(inputData, function (i, d) {
+            var td = $('table td[id=\"' + d.id + '\"]');
+            var level = td.text();
+            td.html(level + ' / <span class="score">' + levelMap[level] + '</span>');
+        });
+    }
+
+    function calculateUnitCloseness() {
+        var data = [];
+        var trs = $('table tbody tr');
+        $.each(trs, function (i, tr) {
+            var obj = {
+                index: i + 1,
+                score: 0
+            };
+            var tds = $(tr).find('td');
+
+            $.each(tds, function (j, td) {
+                var td = $(td);
+
+                if (td.attr('id') && td.text()) {
+                    var score = parseInt(td.find('span.score').text());
+                    obj.score += score;
+                }
+            });
+
+            data.push(obj);
+        });
+
+        function _sortUnitCloseness(data) {
+            var sortData = _.sortBy(data, 'score').reverse();
+            return sortData.map(function (d, i) {
+                d.sort = i + 1;
+
+                return d;
+            });
+        }
+
+        return _sortUnitCloseness(data);
+    }
+
     return {
         getRowData: getRowData,
         getFormData: getFormData,
         getFromToTableData: getFromToTableData,
         setFromToTableData: setFromToTableData,
         getFlowIntesion: getFlowIntesion,
-        setUnitRelationTableData: setUnitRelationTableData
+        getUnitRelationTableData: getUnitRelationTableData,
+        setUnitRelationTableData: setUnitRelationTableData,
+        setAnotherData: setAnotherData,
+        getFullRelationData: getFullRelationData,
+        addRelationLevelScore: addRelationLevelScore,
+        calculateUnitCloseness: calculateUnitCloseness
     };
-}
+};
 

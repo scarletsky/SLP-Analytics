@@ -1,4 +1,5 @@
 var $ = require('jquery');
+var _ = require('lodash');
 
 var factory = function (id, name, remark) {
     var html = [
@@ -131,6 +132,33 @@ var fromToTbody = function (units, dataEmpty) {
     return html;
 }
 
+var unitRelationCloseness = function (data) {
+    var html = '<tr><td>综合接近程度</td>';
+    var dataSortByIndex = _.sortBy(data, 'index');
+
+    $.each(dataSortByIndex, function (i, d) {
+        html += '<td>' + d.score + '</td>';
+    });
+
+    html += '</tr>';
+
+    return html;
+}
+
+var unitRelationSort = function (data) {
+    var html = '<tr><td>排序</td>';
+    var dataSortByIndex = _.sortBy(data, 'index');
+
+    $.each(dataSortByIndex, function (i, d) {
+        html += '<td>' + d.sort + '</td>';
+    });
+
+    html += '</tr>';
+
+    return html;
+}
+
+
 var flowIntensionTbody = function (index, id, intension, level) {
     var html = [
         '<tr>',
@@ -152,3 +180,5 @@ exports.craftPartOption = craftPartOption;
 exports.fromToThead = fromToThead;
 exports.fromToTbody = fromToTbody;
 exports.flowIntensionTbody = flowIntensionTbody;
+exports.unitRelationCloseness = unitRelationCloseness;
+exports.unitRelationSort = unitRelationSort;

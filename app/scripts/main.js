@@ -245,6 +245,27 @@ emitter.on('routeChange', function (route, actionType) {
             $('#unitRelationTable table tbody').html(tbody);
 
             utils.setUnitRelationTableData(slp.flowIntension);
+            slp.unitRelation = utils.getUnitRelationTableData();
+
+            break;
+
+        // 综合相互关系
+        case 'comprehensiveRelation':
+            var thead = tpls.fromToThead(slp.units);
+            var tbody = tpls.fromToTbody(slp.units, 'dataEmpty');
+            $('#comprehensiveRelation table thead').html(thead);
+            $('#comprehensiveRelation table tbody').html(tbody);
+
+            utils.setUnitRelationTableData(slp.flowIntension);
+            utils.setAnotherData(slp.unitRelation);
+            slp.fullRelation = utils.getFullRelationData();
+            utils.addRelationLevelScore(slp.fullRelation);
+            slp.unitCloseness = utils.calculateUnitCloseness();
+
+            var unitRelationClosenessTpls = tpls.unitRelationCloseness(slp.unitCloseness);
+            var unitRelationSortTpls = tpls.unitRelationSort(slp.unitCloseness);
+            $('#comprehensiveRelation table tbody').append(unitRelationClosenessTpls);
+            $('#comprehensiveRelation table tbody').append(unitRelationSortTpls);
 
             break;
         }
