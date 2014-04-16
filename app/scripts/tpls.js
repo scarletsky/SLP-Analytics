@@ -172,6 +172,21 @@ var flowIntensionTbody = function (index, id, intension, level) {
     return html.join('');
 }
 
+var relationWorkTbody = function (index, unit) {
+    var html = [
+        '<tr>',
+            '<td>' + index + '. ' +  unit + '</td>',
+            '<td id="'+ index + '-A"\"></td>',
+            '<td id="'+ index + '-E"\"></td>',
+            '<td id="'+ index + '-I"\"></td>',
+            '<td id="'+ index + '-O"\"></td>',
+            '<td id="'+ index + '-U"\"></td>',
+        '</tr>'
+    ];
+
+    return html.join('');
+}
+
 exports.factory = factory;
 exports.unit = unit;
 exports.part = part;
@@ -182,3 +197,4 @@ exports.fromToTbody = fromToTbody;
 exports.flowIntensionTbody = flowIntensionTbody;
 exports.unitRelationCloseness = unitRelationCloseness;
 exports.unitRelationSort = unitRelationSort;
+exports.relationWorkTbody = relationWorkTbody;

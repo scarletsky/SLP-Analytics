@@ -231,6 +231,21 @@ module.exports = function ($, _) {
         return _sortUnitCloseness(data);
     }
 
+    function setRelationWorkData(fullRelation) {
+        $.each(fullRelation, function (i, obj) {
+            var sepId = obj.id.split('-');
+            var targetId = sepId[0] + '-' + obj.level;
+            var target = $('td[id=\"' + targetId + '\"]');
+            var targetText = target.text();
+
+            if (!targetText) {
+                target.text(sepId[1]);
+            } else {
+                target.text(targetText + ',' + sepId[1]);
+            }
+        });
+    }
+
     return {
         getRowData: getRowData,
         getFormData: getFormData,
@@ -242,7 +257,8 @@ module.exports = function ($, _) {
         setAnotherData: setAnotherData,
         getFullRelationData: getFullRelationData,
         addRelationLevelScore: addRelationLevelScore,
-        calculateUnitCloseness: calculateUnitCloseness
+        calculateUnitCloseness: calculateUnitCloseness,
+        setRelationWorkData: setRelationWorkData
     };
 };
 

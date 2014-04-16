@@ -46,6 +46,7 @@ $(document).on('click', 'a[data-route], button[data-route]', function (e) {
 emitter.on('routeChange', function (route, actionType) {
     $('.container').load('./' + route + '.html', function () {
         var rows = [];
+        var thead, tbody;
         switch (route) {
         // 工厂列表
         case 'factory':
@@ -215,8 +216,8 @@ emitter.on('routeChange', function (route, actionType) {
 
         // 从至表
         case 'fromToTable':
-            var thead = tpls.fromToThead(slp.units);
-            var tbody = tpls.fromToTbody(slp.units);
+            thead = tpls.fromToThead(slp.units);
+            tbody = tpls.fromToTbody(slp.units);
             $('#fromToTable table thead').html(thead);
             $('#fromToTable table tbody').html(tbody);
 
@@ -239,8 +240,8 @@ emitter.on('routeChange', function (route, actionType) {
 
         // 作业单位相互关系
         case 'unitRelationTable':
-            var thead = tpls.fromToThead(slp.units);
-            var tbody = tpls.fromToTbody(slp.units, 'dataEmpty');
+            thead = tpls.fromToThead(slp.units);
+            tbody = tpls.fromToTbody(slp.units, 'dataEmpty');
             $('#unitRelationTable table thead').html(thead);
             $('#unitRelationTable table tbody').html(tbody);
 
@@ -251,8 +252,8 @@ emitter.on('routeChange', function (route, actionType) {
 
         // 综合相互关系
         case 'comprehensiveRelation':
-            var thead = tpls.fromToThead(slp.units);
-            var tbody = tpls.fromToTbody(slp.units, 'dataEmpty');
+            thead = tpls.fromToThead(slp.units);
+            tbody = tpls.fromToTbody(slp.units, 'dataEmpty');
             $('#comprehensiveRelation table thead').html(thead);
             $('#comprehensiveRelation table tbody').html(tbody);
 
@@ -266,6 +267,18 @@ emitter.on('routeChange', function (route, actionType) {
             var unitRelationSortTpls = tpls.unitRelationSort(slp.unitCloseness);
             $('#comprehensiveRelation table tbody').append(unitRelationClosenessTpls);
             $('#comprehensiveRelation table tbody').append(unitRelationSortTpls);
+
+            break;
+
+        // 关系工作表
+        case 'relationWorkTable':
+            $.each(slp.units, function (i, obj) {
+                var tr = tpls.relationWorkTbody(i + 1, obj.name);
+                rows.push(tr);
+            });
+
+            $('#relationWorkTable table tbody').html(rows);
+            utils.setRelationWorkData(slp.fullRelation);
 
             break;
         }
