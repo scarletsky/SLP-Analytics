@@ -287,7 +287,21 @@ emitter.on('routeChange', function (route, actionType) {
             $('#unitPositionTable tbody').html(tbody);
 
             slp.unitPosition = utils.calculateUnitPosition(slp.unitCloseness, slp.totalUnitRelation);
-            utils.setUnitPosition(slp.unitPosition);
+            utils.setUnitPosition(slp.unitPosition, slp.units);
+
+            $('td').hover(function (e) {
+                var hasText = $(this).text();
+
+                if (hasText) {
+                    $(this).find('a').tooltip('show');
+                }
+            }, function (e) {
+                var hasText = $(this).text();
+
+                if (hasText) {
+                    $(this).find('a').tooltip('hide');
+                }
+            })
             break;
         }
     });

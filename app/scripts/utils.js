@@ -472,9 +472,13 @@ module.exports = function ($, _) {
         return data;
     }
 
-    function setUnitPosition(unitPosition) {
+    function setUnitPosition(unitPosition, units) {
         $.each(unitPosition, function (i, obj) {
-            $('td#' + obj.id).text(obj.index);
+            var targetUnit = _.find(units, {num: obj.index});
+            var html = '<a href="#" data-toggle="tooltip" ' + 
+                           'title=\"' + targetUnit.name + '\">' + obj.index + '</a>';
+
+            $('td#' + obj.id).html(html);
         });
     }
 
