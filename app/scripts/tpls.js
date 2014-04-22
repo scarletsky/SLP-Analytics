@@ -187,6 +187,21 @@ var relationWorkTbody = function (index, unit) {
     return html.join('');
 }
 
+var unitPositionTable = function () {
+    var html = '';
+    for(var i = 1; i <= 6; i++) {
+        html += '<tr>';
+
+        for(var j = 1; j <= 6; j++) {
+            html += '<td id=\"' + i + '-' + j + '\" width="50" height="40"></td>'
+        }
+
+        html += '</tr>';
+    }
+
+    return html;
+}
+
 exports.factory = factory;
 exports.unit = unit;
 exports.part = part;
@@ -198,3 +213,4 @@ exports.flowIntensionTbody = flowIntensionTbody;
 exports.unitRelationCloseness = unitRelationCloseness;
 exports.unitRelationSort = unitRelationSort;
 exports.relationWorkTbody = relationWorkTbody;
+exports.unitPositionTable = unitPositionTable;

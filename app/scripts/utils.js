@@ -231,6 +231,30 @@ module.exports = function ($, _) {
         return _sortUnitCloseness(data);
     }
 
+    function getRelationWorkData() {
+        var data = [];
+        var trs = $('#relationWorkTable tbody tr');
+        $.each(trs, function (i, tr) {
+            var obj = {index: i + 1};
+            var tr = $(tr);
+            var tds = tr.find('td[id]');
+
+            $.each(tds, function (j, td) {
+                var td = $(td);
+                var sepId = td.attr('id').split('-');
+                var tdText = td.text();
+
+                if (tdText) {
+                    obj[sepId[1]] = tdText.split(',');
+                }
+            });
+
+            data.push(obj);
+        });
+
+        return data;
+    }
+
     function setRelationWorkData(fullRelation) {
         $.each(fullRelation, function (i, obj) {
             var sepId = obj.id.split('-');
@@ -246,6 +270,214 @@ module.exports = function ($, _) {
         });
     }
 
+    // 作业单位位置关系图
+    function getCenterPositionId() {
+        var rowsLength = $('#unitPositionTable tbody tr').length;
+        var centerNum = Math.round(rowsLength / 2);
+        return centerNum + '-' + centerNum;
+    }
+
+    // 获取 A 级关系位置
+    function getALevenPositionId(hostId) {
+        var sepId = hostId.split('-');
+
+        var upId = parseInt(sepId[0]) + '-' + (parseInt(sepId[1]) - 1);
+        var downId = parseInt(sepId[0]) + '-' + (parseInt(sepId[1]) + 1);
+        var leftId = (parseInt(sepId[0]) - 1) + '-' + parseInt(sepId[1]);
+        var rightId = (parseInt(sepId[0]) + 1) + '-' + parseInt(sepId[1]);
+
+        var result = [upId, downId, leftId, rightId];
+
+        return result;
+    }
+
+    // 获取 E 级关系位置
+    function getELevelPositionId(hostId) {
+        var sepId = hostId.split('-');
+
+        var leftUpId = (parseInt(sepId[0]) - 1) + '-' + (parseInt(sepId[1]) - 1);
+        var leftDownId = (parseInt(sepId[0]) - 1) + '-' + (parseInt(sepId[1]) + 1);
+        var rightUpId = (parseInt(sepId[0]) - 1) + '-' + (parseInt(sepId[1]) - 1);
+        var rightDownId = (parseInt(sepId[0]) + 1) + '-' + (parseInt(sepId[1]) + 1);
+
+        var result = [leftUpId, leftDownId, rightUpId, rightDownId];
+
+        return result;
+    }
+
+    // 获取外一层的位置
+    function getOutsidePositionId(hostId) {
+        var sepId = hostId.split('-');
+
+        var id1 = (parseInt(sepId[0]) - 2) + '-' + (parseInt(sepId[1]) - 2);
+        var id2 = (parseInt(sepId[0]) - 1) + '-' + (parseInt(sepId[1]) - 2);
+        var id3 = (parseInt(sepId[0])) + '-' + (parseInt(sepId[1]) - 2);
+        var id4 = (parseInt(sepId[0]) + 1) + '-' + (parseInt(sepId[1]) - 2);
+        var id5 = (parseInt(sepId[0]) + 2) + '-' + (parseInt(sepId[1]) - 2);
+
+        var id6 = (parseInt(sepId[0]) - 2) + '-' + (parseInt(sepId[1]) - 1);
+        var id7 = (parseInt(sepId[0]) + 2) + '-' + (parseInt(sepId[1]) - 1);
+
+        var id8 = (parseInt(sepId[0]) - 2) + '-' + (parseInt(sepId[1]));
+        var id9 = (parseInt(sepId[0]) + 2) + '-' + (parseInt(sepId[1]));
+
+        var id10 = (parseInt(sepId[0]) - 2) + '-' + (parseInt(sepId[1]) + 1);
+        var id11 = (parseInt(sepId[0]) + 2) + '-' + (parseInt(sepId[1]) + 1);
+
+        var id12 = (parseInt(sepId[0]) - 2) + '-' + (parseInt(sepId[1]) + 2);
+        var id13 = (parseInt(sepId[0]) - 1) + '-' + (parseInt(sepId[1]) + 2);
+        var id14 = (parseInt(sepId[0])) + '-' + (parseInt(sepId[1]) + 2);
+        var id15 = (parseInt(sepId[0]) + 1) + '-' + (parseInt(sepId[1]) + 2);
+        var id16 = (parseInt(sepId[0]) + 2) + '-' + (parseInt(sepId[1]) + 2);
+
+        var result = [id1, id2, id3, id4, id5, id6, id7, id8, id9, id10, id11, id12, id13, id14, id15, id16];
+
+        return result;
+    }
+
+    function getRandomPositionId(hostId, level, dataRefer) {
+        var result, positionIds, randomId;
+
+        switch(level) {
+            case 'A':
+                positionIds = getALevenPositionId(hostId);
+                break;
+            case 'E':
+                positionIds = getELevelPositionId(hostId);
+                break;
+            default:
+                positionIds = getOutsidePositionId(hostId);
+        }
+
+        for (var i = 0, len = positionIds.length; i <= len; i++) {
+            randomId = _.sample(positionIds);
+
+            if (!randomId) break;
+
+            if (_.find(dataRefer, {id: randomId})) {
+                var index = positionIds.indexOf(randomId);
+                positionIds.splice(index, 1);
+            } else {
+                result = randomId;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    function getUnitPositionId(hostId, level, dataRefer) {
+        var result;
+
+        if (level === 'A') {
+            result = getRandomPositionId(hostId, 'A', dataRefer);
+        } else if (level === 'E' || !result) {
+            result = getRandomPositionId(hostId, 'E', dataRefer);
+        } else {
+            result = getRandomPositionId(hostId, 'Outside', dataRefer);
+        }
+
+        return result;
+    }
+
+    function calculateUnitPosition(unitCloseness, totalUnitRelation) {
+        var hostId, lastHostId;
+        var data = [];
+        var levelMap = ['A', 'E', 'I', 'O', 'U', 'X'];
+
+        function _getUnitPositionId(hostId) {
+            var _outputId;
+            var AlevelPosition = getALevenPositionId(hostId);
+            var ElevelPosition = getELevelPositionId(hostId);
+            var OutsidePosition = getOutsidePositionId(hostId);
+
+            $.each(AlevelPosition, function (i, id) {
+                if (_.find(data, {id: id})) {
+                    return;
+                } else {
+                    _outputId = id;
+                    return false;
+                }
+            });
+
+            if (!_outputId) {
+                $.each(ElevelPosition, function (i, id) {
+                    if (_.find(data, {id: id})) {
+                        return;
+                    } else {
+                        _outputId = id;
+                        return false;
+                    }
+                });
+            }
+
+            if (!_outputId) {
+                $.each(OutsidePosition, function (i, id) {
+                   if (_.find(data, {id: id})) {
+                        return;
+                    } else {
+                        _outputId = id;
+                        return false;
+                    }
+                });
+            }
+
+            return _outputId;
+        }
+
+        $.each(unitCloseness, function (i, obj) {
+            var outputObj = {};
+            var target = _.find(totalUnitRelation, {index: obj.index});
+
+            // 第一次循环
+            if (i === 0) {
+                hostId = getCenterPositionId();
+                outputObj.id = hostId;
+                outputObj.index = obj.index;
+                data.push(outputObj);
+
+            } else {
+
+                if (!_.find(data, {index: obj.index})) {
+                    hostId = _getUnitPositionId(lastHostId);
+                    outputObj.id = hostId;
+                    outputObj.index = obj.index;
+                    data.push(outputObj);
+                }
+            }
+
+            $.each(['A', 'E'], function (j, level) {
+                var relatedObj = {};
+                if (!target.hasOwnProperty(level)) {
+                    return;
+                } else {
+                    var relatedUnits = target[level];
+
+                    $.each(relatedUnits, function (k, unitIndex) {
+                        if (_.find(data, {index: parseInt(unitIndex)})) {
+                            return;
+                        } else {
+                            relatedObj.index = parseInt(unitIndex);
+                            relatedObj.id = getUnitPositionId(hostId, level, data);
+                            data.push(relatedObj);
+                        }
+                    });
+                }
+            });
+
+            lastHostId = hostId;
+
+        });
+
+        return data;
+    }
+
+    function setUnitPosition(unitPosition) {
+        $.each(unitPosition, function (i, obj) {
+            $('td#' + obj.id).text(obj.index);
+        });
+    }
+
     return {
         getRowData: getRowData,
         getFormData: getFormData,
@@ -258,7 +490,10 @@ module.exports = function ($, _) {
         getFullRelationData: getFullRelationData,
         addRelationLevelScore: addRelationLevelScore,
         calculateUnitCloseness: calculateUnitCloseness,
-        setRelationWorkData: setRelationWorkData
+        getRelationWorkData: getRelationWorkData,
+        setRelationWorkData: setRelationWorkData,
+        calculateUnitPosition: calculateUnitPosition,
+        setUnitPosition: setUnitPosition
     };
 };
 

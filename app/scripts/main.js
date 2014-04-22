@@ -1,12 +1,12 @@
 /* 即时更新 */
-var Gaze = require('gaze').Gaze;
-var gaze = new Gaze('**/*');
+// var Gaze = require('gaze').Gaze;
+// var gaze = new Gaze('**/*');
 
-gaze.on('all', function (event, filepath) {
-    if (location) {
-        location.reload();
-    }
-});
+// gaze.on('all', function (event, filepath) {
+//     if (location) {
+//         location.reload();
+//     }
+// });
 
 /* 导入依赖 */
 var events = require('events');
@@ -279,7 +279,15 @@ emitter.on('routeChange', function (route, actionType) {
 
             $('#relationWorkTable table tbody').html(rows);
             utils.setRelationWorkData(slp.fullRelation);
+            slp.totalUnitRelation = utils.getRelationWorkData();
 
+            break;
+        case 'unitPositionTable':
+            tbody = tpls.unitPositionTable();
+            $('#unitPositionTable tbody').html(tbody);
+
+            slp.unitPosition = utils.calculateUnitPosition(slp.unitCloseness, slp.totalUnitRelation);
+            utils.setUnitPosition(slp.unitPosition);
             break;
         }
     });
