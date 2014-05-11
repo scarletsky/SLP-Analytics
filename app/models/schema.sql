@@ -1,5 +1,12 @@
+CREATE TABLE User(
+    id INTEGER PRIMARY KEY,
+    username TEXT,
+    password TEXT
+);
+
 CREATE TABLE Factory(
     id INTEGER PRIMARY KEY,
+    user_id INTEGER,
     name TEXT,
     remark TEXT
 );
@@ -29,6 +36,8 @@ CREATE TABLE Craft(
     carrying REAL,
     remark TEXT
 );
+
+INSERT INTO User(username, password) VALUES('admin', 'admin');
 
 INSERT INTO Factory(name, remark) VALUES('工厂1', '测试工厂');
 

@@ -5,7 +5,7 @@
     "keywords": ["slp"],
     "window": {
         "title": "SLP Analytics",
-        "toobar": false,
+        "toolbar": true,
         "frame": true,
         "width": 800,
         "height": 600,

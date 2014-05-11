@@ -1,12 +1,12 @@
 /* 即时更新 */
-// var Gaze = require('gaze').Gaze;
-// var gaze = new Gaze('**/*');
+var Gaze = require('gaze').Gaze;
+var gaze = new Gaze('**/*');
 
-// gaze.on('all', function (event, filepath) {
-//     if (location) {
-//         location.reload();
-//     }
-// });
+gaze.on('all', function (event, filepath) {
+    if (location) {
+        location.reload();
+    }
+});
 
 /* 导入依赖 */
 var events = require('events');
@@ -34,7 +34,7 @@ $(document).on('click', 'a[data-route], button[data-route]', function (e) {
         var row = field.parents('tr');
         var data = utils.getRowData(row);
 
-        window.slp[row.data('klass')] = data;
+        slp[row.data('klass')] = data;
     }
 
     emitter.emit('routeChange', route, actionType);
@@ -48,6 +48,11 @@ emitter.on('routeChange', function (route, actionType) {
         var rows = [];
         var thead, tbody;
         switch (route) {
+        // 登录页面
+        case 'login':
+
+            break;
+
         // 工厂列表
         case 'factory':
             db.all('SELECT * from Factory LIMIT 5', function (err, row) {
@@ -301,10 +306,33 @@ emitter.on('routeChange', function (route, actionType) {
                 if (hasText) {
                     $(this).find('a').tooltip('hide');
                 }
-            })
+            });
             break;
         }
     });
+});
+
+// 处理登录
+$(document).on('click', 'button#loginBtn', function (e) {
+    var inputUsername = $('form#login #username').val();
+    var inputPassword = $('form#login #password').val();
+
+    db.get('SELECT username, password FROM User WHERE username = $username', {
+        $username: inputUsername
+    }, function (err, user) {
+        if (!user) {
+            alert('该用户不存在!');
+            return e.preventDefault();
+        } else if (user.password !== inputPassword) {
+            alert('用户名或密码错误!');
+            return e.preventDefault();
+        } else {
+            slp.user = user;
+            emitter.emit('routeChange', 'factory');
+            return e.preventDefault();
+        }
+    });
+    return e.preventDefault();
 });
 
 // 处理工厂编辑部分
