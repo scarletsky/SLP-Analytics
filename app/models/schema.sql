@@ -38,22 +38,28 @@ CREATE TABLE Craft(
 
 INSERT INTO User(username, password) VALUES('admin', 'admin');
 
-INSERT INTO Factory(name, remark) VALUES('工厂1', '测试工厂');
+INSERT INTO Factory(name, remark) VALUES('变速箱厂', '生产变速箱');
 
-INSERT INTO Unit(factory_id, name, num, usage, remark) VALUES('1', '作业单位1', '1', '测试单位1', '测试');
-INSERT INTO Unit(factory_id, name, num, usage, remark) VALUES('1', '作业单位2', '2', '测试单位2', '测试');
-INSERT INTO Unit(factory_id, name, num, usage, remark) VALUES('1', '作业单位3', '3', '测试单位3', '测试');
-INSERT INTO Unit(factory_id, name, num, usage, remark) VALUES('1', '作业单位4', '4', '测试单位4', '测试');
+INSERT INTO Unit(factory_id, name, num, usage, remark) VALUES('1', '原材料库', '1', '存储钢材', '露天');
+INSERT INTO Unit(factory_id, name, num, usage, remark) VALUES('1', '铸造车间', '2', '铸造', '');
+INSERT INTO Unit(factory_id, name, num, usage, remark) VALUES('1', '热处理车间', '3', '热处理', '');
+INSERT INTO Unit(factory_id, name, num, usage, remark) VALUES('1', '机加工车间', '4', '车、铣、钻', '');
+INSERT INTO Unit(factory_id, name, num, usage, remark) VALUES('1', '精密车间', '5', '精镗、磨销', '');
+INSERT INTO Unit(factory_id, name, num, usage, remark) VALUES('1', '标准件、半成品库', '6', '储存外购半成品', '');
 
-INSERT INTO Part(factory_id, name, remark) VALUES('1', '零件1', '测试零件');
-INSERT INTO Part(factory_id, name, remark) VALUES('1', '零件2', '测试零件');
-INSERT INTO Part(factory_id, name, remark) VALUES('1', '零件3', '测试零件');
-INSERT INTO Part(factory_id, name, remark) VALUES('1', '零件4', '测试零件');
+INSERT INTO Part(factory_id, name, remark) VALUES('1', '机盖', '');
+INSERT INTO Part(factory_id, name, remark) VALUES('1', '机座', '');
+INSERT INTO Part(factory_id, name, remark) VALUES('1', '大齿轮', '');
+INSERT INTO Part(factory_id, name, remark) VALUES('1', '轴', '');
+INSERT INTO Part(factory_id, name, remark) VALUES('1', '齿轮轴', '');
+INSERT INTO Part(factory_id, name, remark) VALUES('1', '端盖', '');
 
-INSERT INTO Craft(factory_id, part_id, route, carrying, remark) VALUES('1', '1', '1,2,3,4', 10.5, '测试');
-INSERT INTO Craft(factory_id, part_id, route, carrying, remark) VALUES('1', '2', '2,1,4', 20, '测试');
-INSERT INTO Craft(factory_id, part_id, route, carrying, remark) VALUES('1', '3', '1,3,4', 41, '测试');
-INSERT INTO Craft(factory_id, part_id, route, carrying, remark) VALUES('1', '4', '3,4', 3.3, '测试');
+INSERT INTO Craft(factory_id, part_id, route, carrying, remark) VALUES('1', '1', '1,2,4,5,6', 2500, '');
+INSERT INTO Craft(factory_id, part_id, route, carrying, remark) VALUES('1', '2', '1,2,4,5,6', 3000, '');
+INSERT INTO Craft(factory_id, part_id, route, carrying, remark) VALUES('1', '3', '1,2,4,3,4,6', 1000, '');
+INSERT INTO Craft(factory_id, part_id, route, carrying, remark) VALUES('1', '4', '1,4,5,3,4,6', 800, '');
+INSERT INTO Craft(factory_id, part_id, route, carrying, remark) VALUES('1', '5', '1,4,5,3,4,6', 1400, '');
+INSERT INTO Craft(factory_id, part_id, route, carrying, remark) VALUES('1', '5', '1,2,4', 50, '');
 
 
 
