@@ -142,7 +142,7 @@ emitter.on('routeChange', function (route, actionType) {
                 $factoryId: slp.factory.id
             }, function (err, row) {
                 $.each(row, function (i, obj) {
-                    var tr = tpls.part(obj.id, obj.code, obj.name, obj.remark);
+                    var tr = tpls.part(obj.id, obj.name, obj.remark);
                     rows.push(tr);
                 });
 
@@ -157,7 +157,6 @@ emitter.on('routeChange', function (route, actionType) {
                 $('#editPart input[name="action"]').val('edit');
                 $('#editPart input[name="factoryId"]').val(slp.factory.id);
                 $('#editPart input[name="id"]').val(slp.part.id);
-                $('#editPart input[name="code"]').val(slp.part.code);
                 $('#editPart input[name="name"]').val(slp.part.name);
                 $('#editPart textarea[name="remark"]').val(slp.part.remark);
             } else {
@@ -420,18 +419,16 @@ $(document).on('click', 'button#editPartBtn', function (e) {
     var data = utils.getFormData('#editPart');   
 
     if (data.action === 'add') {
-        db.run('INSERT INTO Part(factory_id, name, code, remark) VALUES($factoryId, $name, $code, $remark)', {
+        db.run('INSERT INTO Part(factory_id, name, remark) VALUES($factoryId, $name, $remark)', {
             $factoryId: data.factoryId,
             $name: data.name,
-            $code: data.code,
             $remark: data.remark
         });
     } else {
-        db.run('UPDATE Part SET factory_id = $factoryId, name = $name, code = $code, remark = $remark WHERE id = $id', {
+        db.run('UPDATE Part SET factory_id = $factoryId, name = $name, remark = $remark WHERE id = $id', {
             $id: data.id,
             $factoryId: data.factoryId,
             $name: data.name,
-            $code: data.code,
             $remark: data.remark
         });
     }

@@ -49,11 +49,10 @@ var unit = function (id, num, name, usage, remark) {
     return html.join('');
 }
 
-var part = function (id, code, name, remark) {
+var part = function (id, name, remark) {
     var html = [
         '<tr data-klass="part">' +
             '<td class="text-center" data-klass="id">' + id + '</td>',
-            '<td class="text-center" data-klass="code">' + code + '</td>',
             '<td class="text-center" data-klass="name">' + name + '</td>',
             '<td class="text-center" data-klass="remark">' + remark + '</td>',
             '<td class="text-center">',

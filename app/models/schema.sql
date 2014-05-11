@@ -24,7 +24,6 @@ CREATE TABLE Part(
     id INTEGER PRIMARY KEY,
     factory_id INTEGER,
     name TEXT,
-    code TEXT,
     remark TEXT
 );
 
@@ -46,10 +45,10 @@ INSERT INTO Unit(factory_id, name, num, usage, remark) VALUES('1', '作业单位
 INSERT INTO Unit(factory_id, name, num, usage, remark) VALUES('1', '作业单位3', '3', '测试单位3', '测试');
 INSERT INTO Unit(factory_id, name, num, usage, remark) VALUES('1', '作业单位4', '4', '测试单位4', '测试');
 
-INSERT INTO Part(factory_id, name, code, remark) VALUES('1', '零件1', 'LJ1', '测试零件');
-INSERT INTO Part(factory_id, name, code, remark) VALUES('1', '零件2', 'LJ2', '测试零件');
-INSERT INTO Part(factory_id, name, code, remark) VALUES('1', '零件3', 'LJ3', '测试零件');
-INSERT INTO Part(factory_id, name, code, remark) VALUES('1', '零件4', 'LJ4', '测试零件');
+INSERT INTO Part(factory_id, name, remark) VALUES('1', '零件1', '测试零件');
+INSERT INTO Part(factory_id, name, remark) VALUES('1', '零件2', '测试零件');
+INSERT INTO Part(factory_id, name, remark) VALUES('1', '零件3', '测试零件');
+INSERT INTO Part(factory_id, name, remark) VALUES('1', '零件4', '测试零件');
 
 INSERT INTO Craft(factory_id, part_id, route, carrying, remark) VALUES('1', '1', '1,2,3,4', 10.5, '测试');
 INSERT INTO Craft(factory_id, part_id, route, carrying, remark) VALUES('1', '2', '2,1,4', 20, '测试');
