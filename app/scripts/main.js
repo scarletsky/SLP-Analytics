@@ -364,6 +364,15 @@ $(document).on('click', 'button[data-action="deleteFactory"]', function (e) {
         db.run('DELETE FROM Factory WHERE id = $id', {
             $id: data.id
         });
+        db.run('DELETE FROM Unit WHERE factory_id = $factory_id', {
+            $factory_id: data.id
+        });
+        db.run('DELETE FROM Part WHERE factory_id = $factory_id', {
+            $factory_id: data.id
+        });
+        db.run('DELETE FROM Craft WHERE factory_id = $factory_id', {
+            $factory_id: data.id
+        });
 
         emitter.emit('routeChange', 'factory');
     }
