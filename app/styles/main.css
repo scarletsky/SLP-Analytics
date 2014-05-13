@@ -13,3 +13,19 @@ body {
   line-height: 40px;
   padding-bottom: 19px;
 }
+
+td.red {
+    background-color: red !important;
+}
+
+td.green {
+    background-color: green !important;
+}
+
+td.yellow {
+    background-color: yellow !important;
+}
+
+td.blue {
+    background-color: blue !important;
+}

@@ -53,6 +53,25 @@ module.exports = function ($, _) {
         });
     }
 
+    function setTdColor() {
+        var colorMap = {
+            'A': 'red',
+            'E': 'yellow',
+            'I': 'green',
+            'O': 'blue'
+        };
+
+        $('table td').each(function (i, td) {
+            var td = $(td);
+            var text = td.text();
+            var firstText = text ? text.substring(0, 1) : '';
+
+            if (colorMap.hasOwnProperty(firstText)) {
+                td.addClass(colorMap[firstText])
+            }
+        });
+    }
+
     function getUnitRelationTableData() {
         var data = [];
         var tds = $('#unitRelationTable table td[id]');
@@ -497,7 +516,8 @@ module.exports = function ($, _) {
         getRelationWorkData: getRelationWorkData,
         setRelationWorkData: setRelationWorkData,
         calculateUnitPosition: calculateUnitPosition,
-        setUnitPosition: setUnitPosition
+        setUnitPosition: setUnitPosition,
+        setTdColor: setTdColor
     };
 };
 

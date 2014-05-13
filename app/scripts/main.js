@@ -250,6 +250,7 @@ emitter.on('routeChange', function (route, actionType) {
             $('#unitRelationTable table tbody').html(tbody);
 
             utils.setUnitRelationTableData(slp.flowIntension);
+            utils.setTdColor();
             slp.unitRelation = utils.getUnitRelationTableData();
 
             break;
@@ -263,6 +264,7 @@ emitter.on('routeChange', function (route, actionType) {
 
             utils.setUnitRelationTableData(slp.flowIntension);
             utils.setAnotherData(slp.unitRelation);
+            utils.setTdColor();
             slp.fullRelation = utils.getFullRelationData();
             utils.addRelationLevelScore(slp.fullRelation);
             slp.unitCloseness = utils.calculateUnitCloseness();
