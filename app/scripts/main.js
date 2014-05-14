@@ -55,7 +55,9 @@ emitter.on('routeChange', function (route, actionType) {
 
         // 工厂列表
         case 'factory':
-            db.all('SELECT * from Factory LIMIT 5', function (err, row) {
+            db.all('SELECT * from Factory WHERE user_id = $userId LIMIT 5', {
+                $userId: slp.user.id
+            }, function (err, row) {
                 $.each(row, function (i, obj) {
                     var tr = tpls.factory(obj.id, obj.name, obj.remark);
                     rows.push(tr);
@@ -318,7 +320,7 @@ $(document).on('click', 'button#loginBtn', function (e) {
     var inputUsername = $('form#login #username').val();
     var inputPassword = $('form#login #password').val();
 
-    db.get('SELECT username, password FROM User WHERE username = $username', {
+    db.get('SELECT * FROM User WHERE username = $username', {
         $username: inputUsername
     }, function (err, user) {
         if (!user) {
@@ -341,7 +343,8 @@ $(document).on('click', 'button#editFactoryBtn', function (e) {
     var data = utils.getFormData('#editFactory');   
 
     if (data.action === 'add') {
-        db.run('INSERT INTO Factory(name, remark) VALUES($name, $remark)', {
+        db.run('INSERT INTO Factory(user_id, name, remark) VALUES($userId, $name, $remark)', {
+            $userId: slp.user.id,
             $name: data.name,
             $remark: data.remark
         });

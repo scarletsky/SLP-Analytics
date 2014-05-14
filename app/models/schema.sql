@@ -38,7 +38,7 @@ CREATE TABLE Craft(
 
 INSERT INTO User(username, password) VALUES('admin', 'admin');
 
-INSERT INTO Factory(name, remark) VALUES('变速箱厂', '生产变速箱');
+INSERT INTO Factory(user_id, name, remark) VALUES('1', '变速箱厂', '生产变速箱');
 
 INSERT INTO Unit(factory_id, name, num, usage, remark) VALUES('1', '原材料库', '1', '存储钢材', '露天');
 INSERT INTO Unit(factory_id, name, num, usage, remark) VALUES('1', '铸造车间', '2', '铸造', '');
