@@ -1,12 +1,12 @@
-/* 即时更新 */
-var Gaze = require('gaze').Gaze;
-var gaze = new Gaze('**/*');
+// /* 即时更新 */
+// var Gaze = require('gaze').Gaze;
+// var gaze = new Gaze('**/*');
 
-gaze.on('all', function (event, filepath) {
-    if (location) {
-        location.reload();
-    }
-});
+// gaze.on('all', function (event, filepath) {
+//     if (location) {
+//         location.reload();
+//     }
+// });
 
 /* 导入依赖 */
 var events = require('events');
@@ -290,6 +290,8 @@ emitter.on('routeChange', function (route, actionType) {
             slp.totalUnitRelation = utils.getRelationWorkData();
 
             break;
+
+        // 位置关系图
         case 'unitPositionTable':
             tbody = tpls.unitPositionTable();
             $('#unitPositionTable tbody').html(tbody);
@@ -519,6 +521,31 @@ $(document).on('click', 'button[data-action="deleteCraft"]', function (e) {
     return e.preventDefault();
 });
 
+$(document).on('click', 'button[data-action="saveResult"]', function (e) {
+    var remark = $('#saveResult input#remark').val();
+
+    db.get('SELECT * FROM Result WHERE factory_id = $factoryId', {
+        $factoryId: slp.factory.id
+    }, function (err, result) {
+        if (!result) {
+            db.run('INSERT INTO Result(factory_id, position, remark) VALUES($factoryId, $position, $remark)', {
+                $factoryId: slp.factory.id,
+                $position: utils.parseResultToString(slp.unitPosition),
+                $remark: remark
+            });
+        } else {
+            db.run('UPDATE Result SET position = $position, remark = $remark WHERE factory_id = $factoryId', {
+                $position: utils.parseResultToString(slp.unitPosition),
+                $remark: remark,
+                $factoryId: slp.factory.id
+            });
+        }
+
+        $('#saveResult').modal('hide');
+
+        return e.preventDefault();
+    });
+});
 
 });
 

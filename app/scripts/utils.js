@@ -501,6 +501,21 @@ module.exports = function ($, _) {
         });
     }
 
+    function parseResultToString(unitPosition) {
+        var output = '';
+        var len = unitPosition.length;
+
+        $.each(unitPosition, function (i, obj) {
+            output += JSON.stringify(obj);
+
+            if (len !== i + 1) {
+                output += ', '
+            }
+        });
+
+        return output;
+    }
+
     return {
         getRowData: getRowData,
         getFormData: getFormData,
@@ -517,7 +532,8 @@ module.exports = function ($, _) {
         setRelationWorkData: setRelationWorkData,
         calculateUnitPosition: calculateUnitPosition,
         setUnitPosition: setUnitPosition,
-        setTdColor: setTdColor
+        setTdColor: setTdColor,
+        parseResultToString: parseResultToString
     };
 };
 

@@ -9,6 +9,36 @@
         </tbody>
     </table>
 
+    <button class="btn btn-success" data-toggle="modal" data-target="#saveResult">保存结果</button>
     <button class="btn btn-primary" data-route="unitPositionTable">再试一次</button>
     <button class="btn btn-default" data-route="relationWorkTable">返回</button>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="saveResult" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">保存结果</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="remark">备注</label>
+                    <input class="form-control" 
+                           type="text"
+                           id="remark"
+                           name="remark"
+                           placeholder="请输入备注" />
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-action="saveResult">保存</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

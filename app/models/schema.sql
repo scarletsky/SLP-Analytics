@@ -36,6 +36,13 @@ CREATE TABLE Craft(
     remark TEXT
 );
 
+CREATE TABLE Result(
+    id INTEGER PRIMARY KEY,
+    factory_id INTEGER,
+    position TEXT,
+    remark TEXT
+);
+
 INSERT INTO User(username, password) VALUES('admin', 'admin');
 
 INSERT INTO Factory(user_id, name, remark) VALUES('1', '变速箱厂', '生产变速箱');
