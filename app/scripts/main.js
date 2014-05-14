@@ -338,6 +338,15 @@ $(document).on('click', 'button#loginBtn', function (e) {
     return e.preventDefault();
 });
 
+// 处理登出
+$(document).on('click', 'button#logoutBtn', function (e) {
+    slp = {};
+
+    emitter.emit('routeChange', 'login');
+
+    return e.preventDefault();
+});
+
 // 处理工厂编辑部分
 $(document).on('click', 'button#editFactoryBtn', function (e) {
     var data = utils.getFormData('#editFactory');   
