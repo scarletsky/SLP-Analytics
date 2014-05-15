@@ -82,17 +82,31 @@ emitter.on('routeChange', function (route, actionType) {
         // 管理工厂
         case 'manageFactory':
             $('#manageFactory #factoryName').text(slp.factory.name);
+
+            // getUnits
             db.all('SELECT * FROM Unit WHERE factory_id = $factoryId', {
                 $factoryId: slp.factory.id
             }, ep.done('getUnits'));
 
+            // getParts
             db.all('SELECT * FROM Part WHERE factory_id = $factoryId', {
                 $factoryId: slp.factory.id
             }, ep.done('getParts'));
 
+            // getCrafts
             db.all('SELECT * FROM Craft WHERE factory_id = $factoryId', {
                 $factoryId: slp.factory.id
             }, ep.done('getCrafts'));
+
+            //get result
+            db.get('SELECT * FROM Result WHERE factory_id = $factoryId', {
+                $factoryId: slp.factory.id
+            }, function (err, result) {
+                if (result) {
+                    slp.result = result;
+                    $('#manageFactory #readResultBtn').removeClass('disabled');
+                }
+            });
 
             ep.all('getUnits', 'getParts', 'getCrafts', function (units, parts, crafts) {
                 slp.units = units;
@@ -312,6 +326,32 @@ emitter.on('routeChange', function (route, actionType) {
                     $(this).find('a').tooltip('hide');
                 }
             });
+            break;
+
+        // 查看结果
+        case 'resultOnly':
+            tbody = tpls.unitPositionTable();
+            $('#unitPositionTable tbody').html(tbody);
+            $('#unitPositionTable span#remark').text(slp.result.remark);
+
+            var resultList = slp.result.position.split(', ');
+            var resultFinal = utils.parseResultToJSON(resultList);
+            utils.setUnitPosition(resultFinal, slp.units);
+
+            $('td').hover(function (e) {
+                var hasText = $(this).text();
+
+                if (hasText) {
+                    $(this).find('a').tooltip('show');
+                }
+            }, function (e) {
+                var hasText = $(this).text();
+
+                if (hasText) {
+                    $(this).find('a').tooltip('hide');
+                }
+            });
+
             break;
         }
     });

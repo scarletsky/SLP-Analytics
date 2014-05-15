@@ -501,16 +501,26 @@ module.exports = function ($, _) {
         });
     }
 
-    function parseResultToString(unitPosition) {
+    function parseResultToString(result) {
         var output = '';
-        var len = unitPosition.length;
+        var len = result.length;
 
-        $.each(unitPosition, function (i, obj) {
+        $.each(result, function (i, obj) {
             output += JSON.stringify(obj);
 
             if (len !== i + 1) {
                 output += ', '
             }
+        });
+
+        return output;
+    }
+
+    function parseResultToJSON(result) {
+        var output = [];
+
+        $.each(result, function (i, obj) {
+            output.push(JSON.parse(obj));
         });
 
         return output;
@@ -533,7 +543,8 @@ module.exports = function ($, _) {
         calculateUnitPosition: calculateUnitPosition,
         setUnitPosition: setUnitPosition,
         setTdColor: setTdColor,
-        parseResultToString: parseResultToString
+        parseResultToString: parseResultToString,
+        parseResultToJSON: parseResultToJSON
     };
 };
 
