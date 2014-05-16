@@ -15,17 +15,17 @@ body {
 }
 
 td.red {
-    background-color: red !important;
+    background-color: rgb(255, 97, 97) !important;
 }
 
 td.green {
-    background-color: green !important;
+    background-color: rgb(60, 231, 60) !important;
 }
 
 td.yellow {
-    background-color: yellow !important;
+    background-color: rgb(255, 255, 147) !important;
 }
 
 td.blue {
-    background-color: blue !important;
+    background-color: rgb(111, 111, 255) !important;
 }
