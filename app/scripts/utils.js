@@ -88,10 +88,16 @@ module.exports = function ($, _) {
         return data;
     }
 
-    function setUnitRelationTableData(intension) {
-        $.each(intension, function (i, obj) {
-            $('table td#' + obj.id).text(obj.level);
-        });
+    function setUnitRelationTableData(intension, type) {
+        if (!type) {
+            $.each(intension, function (i, obj) {
+                $('table td#' + obj.id).text(obj.level);
+            });
+        } else {
+            $.each(intension, function (i, obj) {
+                $('table td#' + obj.pair).text(obj.level);
+            });
+        }
 
         $('table td[id]').each(function (i, td) {
             var tdId = $(td).attr('id');
@@ -526,6 +532,22 @@ module.exports = function ($, _) {
         return output;
     }
 
+    function addTooltipsEffects() {
+        $('td').hover(function (e) {
+            var hasText = $(this).text();
+
+            if (hasText) {
+                $(this).find('a').tooltip('show');
+            }
+        }, function (e) {
+            var hasText = $(this).text();
+
+            if (hasText) {
+                $(this).find('a').tooltip('hide');
+            }
+        });
+    }
+
     return {
         getRowData: getRowData,
         getFormData: getFormData,
@@ -544,7 +566,8 @@ module.exports = function ($, _) {
         setUnitPosition: setUnitPosition,
         setTdColor: setTdColor,
         parseResultToString: parseResultToString,
-        parseResultToJSON: parseResultToJSON
+        parseResultToJSON: parseResultToJSON,
+        addTooltipsEffects: addTooltipsEffects
     };
 };
 

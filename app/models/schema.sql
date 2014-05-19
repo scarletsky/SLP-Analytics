@@ -36,6 +36,14 @@ CREATE TABLE Craft(
     remark TEXT
 );
 
+CREATE TABLE Nonlogistics(
+    id INTEGER PRIMARY KEY,
+    factory_id INTEGER,
+    pair TEXT,
+    level TEXT,
+    reason TEXT
+);
+
 CREATE TABLE Result(
     id INTEGER PRIMARY KEY,
     factory_id INTEGER,

@@ -98,6 +98,7 @@ emitter.on('routeChange', function (route, actionType) {
                 $factoryId: slp.factory.id
             }, ep.done('getCrafts'));
 
+ 
             //get result
             db.get('SELECT * FROM Result WHERE factory_id = $factoryId', {
                 $factoryId: slp.factory.id
@@ -234,6 +235,48 @@ emitter.on('routeChange', function (route, actionType) {
             });
             break;
 
+        // 作业单位相互关系分析
+        case 'nonFlowIntension':
+            db.all('SELECT * FROM Nonlogistics WHERE factory_id = $factoryId', {
+                $factoryId: slp.factory.id
+            }, function (err, nonFlowIntension) {
+                slp.nonFlowIntension = nonFlowIntension;
+
+                if (slp.nonFlowIntension.length) {
+                    // select nonFlowIntension
+                    $.each(slp.nonFlowIntension, function (i, obj) {
+                        var tr = tpls.nonFLowIntensionTbodyX(obj.id, i + 1, obj.pair, obj.level, obj.reason, slp.units);
+                        rows.push(tr);
+                    });
+
+                    $('#nonFlowIntension tbody').html(rows);
+                    utils.addTooltipsEffects();
+                    $('#nonFlowIntension button[data-route="nonFlowRelationTable"]').removeClass('disabled');
+
+                } else {
+                    // create nonFlowIntension
+                    var tempUnits = $.extend([], slp.units);
+                    var unitsLength = slp.units.length;
+                    var index = 1;
+
+                    $.each(slp.units, function (i, obj) {
+                        if (unitsLength !== i + 1) {
+                            tempUnits.shift();
+
+                            $.each(tempUnits, function (j, tmpObj) {
+                                var tr = tpls.nonFLowIntensionTbody(index, obj, tmpObj);
+                                rows.push(tr);
+                                index++;
+                            });
+                        }
+                    });
+
+                    $('#nonFlowIntension tbody').html(rows);
+                    utils.addTooltipsEffects();
+                }
+            });
+            break;
+
         // 从至表
         case 'fromToTable':
             thead = tpls.fromToThead(slp.units);
@@ -258,7 +301,7 @@ emitter.on('routeChange', function (route, actionType) {
             $('#flowIntensionTable table tbody').html(rows);
             break;
 
-        // 作业单位相互关系
+        // 作业单位物流相关表
         case 'unitRelationTable':
             thead = tpls.fromToThead(slp.units);
             tbody = tpls.fromToTbody(slp.units, 'dataEmpty');
@@ -268,7 +311,18 @@ emitter.on('routeChange', function (route, actionType) {
             utils.setUnitRelationTableData(slp.flowIntension);
             utils.setTdColor();
             slp.unitRelation = utils.getUnitRelationTableData();
+            break;
 
+        // 作业单位非物流相关表
+        case 'nonFlowRelationTable':
+            thead = tpls.fromToThead(slp.units);
+            tbody = tpls.fromToTbody(slp.units, 'dataEmpty');
+            $('#unitRelationTable table thead').html(thead);
+            $('#unitRelationTable table tbody').html(tbody);
+
+            utils.setUnitRelationTableData(slp.nonFlowIntension, 'true');
+            utils.setTdColor();
+            slp.unitRelation = utils.getUnitRelationTableData();
             break;
 
         // 综合相互关系
@@ -312,20 +366,7 @@ emitter.on('routeChange', function (route, actionType) {
 
             slp.unitPosition = utils.calculateUnitPosition(slp.unitCloseness, slp.totalUnitRelation);
             utils.setUnitPosition(slp.unitPosition, slp.units);
-
-            $('td').hover(function (e) {
-                var hasText = $(this).text();
-
-                if (hasText) {
-                    $(this).find('a').tooltip('show');
-                }
-            }, function (e) {
-                var hasText = $(this).text();
-
-                if (hasText) {
-                    $(this).find('a').tooltip('hide');
-                }
-            });
+            utils.addTooltipsEffects();
             break;
 
         // 查看结果
@@ -337,21 +378,7 @@ emitter.on('routeChange', function (route, actionType) {
             var resultList = slp.result.position.split(', ');
             var resultFinal = utils.parseResultToJSON(resultList);
             utils.setUnitPosition(resultFinal, slp.units);
-
-            $('td').hover(function (e) {
-                var hasText = $(this).text();
-
-                if (hasText) {
-                    $(this).find('a').tooltip('show');
-                }
-            }, function (e) {
-                var hasText = $(this).text();
-
-                if (hasText) {
-                    $(this).find('a').tooltip('hide');
-                }
-            });
-
+            utils.addTooltipsEffects();
             break;
         }
     });
@@ -585,6 +612,68 @@ $(document).on('click', 'button[data-action="saveResult"]', function (e) {
 
         return e.preventDefault();
     });
+});
+
+$(document).on('click', 'button[data-action="saveNonFlow"]', function (e) {
+    var rowsData = [];
+    var rows = $('#nonFlowIntension tbody tr');
+    var flag = true;
+    $.each(rows, function (i, row) {
+        var data = {};
+        var tds = $(row).find('td');
+        data.id = tds.eq(0).text();
+        data.pair = tds.eq(2).text();
+        data.level = tds.eq(3).text();
+        data.reason = tds.eq(4).text();
+
+        rowsData.push(data);
+
+        if (!data.level) {
+            flag = false;
+        }
+    });
+
+    if (!flag) {
+        alert('关系密切程度一列不能有空值！');
+    } else {
+        if (!slp.nonFlowIntension.length) {
+            // insert
+            $.each(rowsData, function (i, data) {
+                db.run('INSERT INTO Nonlogistics(factory_id, pair, level, reason) VALUES($factoryId, $pair, $level, $reason)', {
+                    $factoryId: slp.factory.id,
+                    $pair: data.pair,
+                    $level: data.level,
+                    $reason: data.reason
+                });
+            });
+        } else {
+            // update
+            $.each(rowsData, function (i, data) {
+                db.run('UPDATE Nonlogistics SET pair = $pair, level = $level, reason = $reason WHERE id = $id', {
+                    $id: data.id,
+                    $pair: data.pair,
+                    $level: data.level,
+                    $reason: data.reason
+                });
+            });
+        }
+        alert('保存成功！');
+        emitter.emit('routeChange', 'nonFlowIntension');
+    }
+
+    return e.preventDefault();
+});
+
+$(document).on('click', 'button[data-action="deleteNonFLow"]', function (e) {
+    if (confirm('你确定要删除全部记录？')) {
+        db.run('DELETE FROM Nonlogistics WHERE factory_id = $factoryId', {
+            $factoryId: slp.factory.id
+        });
+
+        emitter.emit('routeChange', 'nonFlowIntension');
+    }
+
+    return e.preventDefault();
 });
 
 });

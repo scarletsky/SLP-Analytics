@@ -171,6 +171,44 @@ var flowIntensionTbody = function (index, id, intension, level) {
     return html.join('');
 }
 
+var nonFLowIntensionTbody = function (index, masterUnit, slaveUnit) {
+    var html = [
+        '<tr>',
+            '<td></td>',
+            '<td>' + index + '</td>',
+            '<td>',
+                '<a href="#" data-toggle="tooltip" ' + 
+                            'title=\"' + masterUnit.name + ' - ' + slaveUnit.name + '\">' + masterUnit.num + '-' + slaveUnit.num + '</a>',
+            '</td>',
+            '<td contenteditable="true"></td>',
+            '<td contenteditable="true"></td>',
+        '</tr>'
+    ];
+
+    return html.join('');
+}
+
+var nonFLowIntensionTbodyX = function (id, index, pair, level, reason, units) {
+    var sepId = pair.split('-');
+    var masterUnit = _.find(units, {id: Number(sepId[0])});
+    var slaveUnit = _.find(units, {id: Number(sepId[1])});
+
+    var html = [
+        '<tr>',
+            '<td>' + id + '</td>',
+            '<td>' + index + '</td>',
+            '<td>',
+                '<a href="#" data-toggle="tooltip" ' + 
+                            'title=\"' + masterUnit.name + ' - ' + slaveUnit.name + '\">' + masterUnit.num + '-' + slaveUnit.num + '</a>',
+            '</td>',
+            '<td contenteditable="true">' + level + '</td>',
+            '<td contenteditable="true">' + reason + '</td>',
+        '</tr>'
+    ];
+
+    return html.join('');
+}
+
 var relationWorkTbody = function (index, unit) {
     var html = [
         '<tr>',
@@ -209,6 +247,8 @@ exports.craftPartOption = craftPartOption;
 exports.fromToThead = fromToThead;
 exports.fromToTbody = fromToTbody;
 exports.flowIntensionTbody = flowIntensionTbody;
+exports.nonFLowIntensionTbody = nonFLowIntensionTbody;
+exports.nonFLowIntensionTbodyX = nonFLowIntensionTbodyX;
 exports.unitRelationCloseness = unitRelationCloseness;
 exports.unitRelationSort = unitRelationSort;
 exports.relationWorkTbody = relationWorkTbody;
