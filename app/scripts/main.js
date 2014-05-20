@@ -82,6 +82,7 @@ emitter.on('routeChange', function (route, actionType) {
         // 管理工厂
         case 'manageFactory':
             $('#manageFactory #factoryName').text(slp.factory.name);
+            slp.analysisType = '';
 
             // getUnits
             db.all('SELECT * FROM Unit WHERE factory_id = $factoryId', {
@@ -242,6 +243,10 @@ emitter.on('routeChange', function (route, actionType) {
             }, function (err, nonFlowIntension) {
                 slp.nonFlowIntension = nonFlowIntension;
 
+                if (slp.analysisType === 'together') {
+                    $('button[data-route="manageFactory"]').attr('data-route', 'unitRelationTable');
+                }
+
                 if (slp.nonFlowIntension.length) {
                     // select nonFlowIntension
                     $.each(slp.nonFlowIntension, function (i, obj) {
@@ -303,6 +308,9 @@ emitter.on('routeChange', function (route, actionType) {
 
         // 作业单位物流相关表
         case 'unitRelationTable':
+            if (slp.analysisType === 'together') {
+                $('button[data-route="comprehensiveCloseness"]').attr('data-route', 'nonFlowIntension').text('作业单位相互关系分析');
+            }
             thead = tpls.fromToThead(slp.units);
             tbody = tpls.fromToTbody(slp.units, 'dataEmpty');
             $('#unitRelationTable table thead').html(thead);
@@ -311,10 +319,15 @@ emitter.on('routeChange', function (route, actionType) {
             utils.setUnitRelationTableData(slp.flowIntension);
             utils.setTdColor();
             slp.unitRelation = utils.getUnitRelationTableData();
+
             break;
 
         // 作业单位非物流相关表
         case 'nonFlowRelationTable':
+            if (slp.analysisType === 'together') {
+                var confirmWeightBtn = $('<button class="btn btn-primary" data-route="confirmWeight">确定权重</button>');
+                $('button[data-route="nonFlowIntension"]').before(confirmWeightBtn);
+            }
             thead = tpls.fromToThead(slp.units);
             tbody = tpls.fromToTbody(slp.units, 'dataEmpty');
             $('#unitRelationTable table thead').html(thead);
@@ -322,15 +335,38 @@ emitter.on('routeChange', function (route, actionType) {
 
             utils.setUnitRelationTableData(slp.nonFlowIntension, 'true');
             utils.setTdColor();
-            slp.unitRelation = utils.getUnitRelationTableData();
             break;
 
-        // 综合相互关系
-        case 'comprehensiveRelation':
+        // 综合相互关系计算表
+        case 'calComprehensiveRelation':
+            $('#title').text('物流关系与非物流关系的权重为' + slp.weight);
+            slp.comprehensiveRelation = utils.calComprehensiveRelation(slp.unitRelation, slp.nonFlowIntension, slp.weight);
+            $.each(slp.comprehensiveRelation, function (i, obj) {
+                var tr = tpls.calComprehensiveRelationTbody(obj.index, obj.pair, obj.flowLevel, obj.flowScore, obj.nonFlowLevel, obj.nonFlowScore, obj.totalScore, obj.level);
+                rows.push(tr);
+            });
+
+            $('#calComprehensiveRelation table tbody').html(rows);
+            break;
+
+        // 综合相互关系表
+        case 'comprehensiveRelationTable':
             thead = tpls.fromToThead(slp.units);
             tbody = tpls.fromToTbody(slp.units, 'dataEmpty');
-            $('#comprehensiveRelation table thead').html(thead);
-            $('#comprehensiveRelation table tbody').html(tbody);
+            $('#comprehensiveRelationTable table thead').html(thead);
+            $('#comprehensiveRelationTable table tbody').html(tbody);
+
+            utils.setUnitRelationTableData(slp.comprehensiveRelation, 'true');
+            utils.setTdColor();
+
+            break;
+
+        // 综合接近程度
+        case 'comprehensiveCloseness':
+            thead = tpls.fromToThead(slp.units);
+            tbody = tpls.fromToTbody(slp.units, 'dataEmpty');
+            $('#comprehensiveCloseness table thead').html(thead);
+            $('#comprehensiveCloseness table tbody').html(tbody);
 
             utils.setUnitRelationTableData(slp.flowIntension);
             utils.setAnotherData(slp.unitRelation);
@@ -341,8 +377,8 @@ emitter.on('routeChange', function (route, actionType) {
 
             var unitRelationClosenessTpls = tpls.unitRelationCloseness(slp.unitCloseness);
             var unitRelationSortTpls = tpls.unitRelationSort(slp.unitCloseness);
-            $('#comprehensiveRelation table tbody').append(unitRelationClosenessTpls);
-            $('#comprehensiveRelation table tbody').append(unitRelationSortTpls);
+            $('#comprehensiveCloseness table tbody').append(unitRelationClosenessTpls);
+            $('#comprehensiveCloseness table tbody').append(unitRelationSortTpls);
 
             break;
 
@@ -672,6 +708,23 @@ $(document).on('click', 'button[data-action="deleteNonFLow"]', function (e) {
 
         emitter.emit('routeChange', 'nonFlowIntension');
     }
+
+    return e.preventDefault();
+});
+
+$(document).on('click', 'button[data-action="confirmWeight"]', function (e) {
+    var weight = $('#confirmWeight input[type="radio"]:checked').val();
+    slp.weight = weight;
+
+    emitter.emit('routeChange', 'calComprehensiveRelation');
+
+    return e.preventDefault();
+});
+
+$(document).on('click', 'button[data-action="togetherAnalysis"]', function (e) {
+    slp.analysisType = 'together';
+
+    emitter.emit('routeChange', 'fromToTable');
 
     return e.preventDefault();
 });

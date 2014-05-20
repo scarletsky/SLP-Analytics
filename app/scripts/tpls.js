@@ -209,6 +209,23 @@ var nonFLowIntensionTbodyX = function (id, index, pair, level, reason, units) {
     return html.join('');
 }
 
+var calComprehensiveRelationTbody = function (index, pair, flowLevel, flowScore, nonFlowLevel, nonFlowScore, totalScore, level) {
+    var html = [
+        '<tr>',
+            '<td>' + index + '</td>',
+            '<td>' + pair + '</td>',
+            '<td>' + flowLevel + '</td>',
+            '<td>' + flowScore + '</td>',
+            '<td>' + nonFlowLevel + '</td>',
+            '<td>' + nonFlowScore + '</td>',
+            '<td>' + totalScore + '</td>',
+            '<td contenteditable="true">' + level + '</td>',
+        '</tr>'
+    ];
+
+    return html.join('');
+}
+
 var relationWorkTbody = function (index, unit) {
     var html = [
         '<tr>',
@@ -249,6 +266,7 @@ exports.fromToTbody = fromToTbody;
 exports.flowIntensionTbody = flowIntensionTbody;
 exports.nonFLowIntensionTbody = nonFLowIntensionTbody;
 exports.nonFLowIntensionTbodyX = nonFLowIntensionTbodyX;
+exports.calComprehensiveRelationTbody = calComprehensiveRelationTbody;
 exports.unitRelationCloseness = unitRelationCloseness;
 exports.unitRelationSort = unitRelationSort;
 exports.relationWorkTbody = relationWorkTbody;

@@ -67,7 +67,7 @@ module.exports = function ($, _) {
             var firstText = text ? text.substring(0, 1) : '';
 
             if (colorMap.hasOwnProperty(firstText)) {
-                td.addClass(colorMap[firstText])
+                td.addClass(colorMap[firstText]);
             }
         });
     }
@@ -515,7 +515,7 @@ module.exports = function ($, _) {
             output += JSON.stringify(obj);
 
             if (len !== i + 1) {
-                output += ', '
+                output += ', ';
             }
         });
 
@@ -548,6 +548,81 @@ module.exports = function ($, _) {
         });
     }
 
+    function calComprehensiveRelation(flowIntensionData, nonFlowIntensionData, weight) {
+        var output = [];
+        var levelMap = {
+            'A': 4,
+            'E': 3,
+            'I': 2,
+            'O': 1,
+            'U': 0,
+            'X': -1
+        };
+        var parseWeight = weight.split(':').map(function (v) {
+            return Number(v);
+        });
+
+        $.each(flowIntensionData, function (i, obj) {
+            var data = {};
+            var target = _.find(nonFlowIntensionData, {pair: obj.id});
+            data.index = i + 1;
+            data.pair = obj.id;
+            data.flowLevel = obj.level;
+            data.flowScore = levelMap[obj.level];
+            data.nonFlowLevel = target.level;
+            data.nonFlowScore = levelMap[target.level];
+            data.totalScore = data.flowScore * parseWeight[0] + data.nonFlowScore * parseWeight[1];
+
+            if (weight === '3:1' || weight === '1:3') {
+                if (data.totalScore >= 15) {
+                    data.level = 'A';
+                } else if (data.totalScore >= 12) {
+                    data.level = 'E';
+                } else if (data.totalScore >= 9) {
+                    data.level = 'I';
+                } else if (data.totalScore >= 6) {
+                    data.level = 'O';
+                } else if (data.totalScore >= 0) {
+                    data.level = 'U';
+                } else {
+                    data.level = 'X';
+                }
+            } else if (weight === '2:1' || weight === '1:2') {
+                if (data.totalScore >= 10) {
+                    data.level = 'A';
+                } else if (data.totalScore >= 7) {
+                    data.level = 'E';
+                } else if (data.totalScore >= 4) {
+                    data.level = 'I';
+                } else if (data.totalScore >= 1) {
+                    data.level = 'O';
+                } else if (data.totalScore === 0) {
+                    data.level = 'U';
+                } else {
+                    data.level = 'X';
+                }
+            } else {
+                if (data.totalScore >= 7) {
+                    data.level = 'A';
+                } else if (data.totalScore >= 5) {
+                    data.level = 'E';
+                } else if (data.totalScore >= 3) {
+                    data.level = 'I';
+                } else if (data.totalScore >= 1) {
+                    data.level = 'O';
+                } else if (data.totalScore === 0) {
+                    data.level = 'U';
+                } else {
+                    data.level = 'X';
+                }
+            }
+
+            output.push(data);
+        });
+
+        return output;
+    }
+
     return {
         getRowData: getRowData,
         getFormData: getFormData,
@@ -567,7 +642,8 @@ module.exports = function ($, _) {
         setTdColor: setTdColor,
         parseResultToString: parseResultToString,
         parseResultToJSON: parseResultToJSON,
-        addTooltipsEffects: addTooltipsEffects
+        addTooltipsEffects: addTooltipsEffects,
+        calComprehensiveRelation: calComprehensiveRelation
     };
 };
 
