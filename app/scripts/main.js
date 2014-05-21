@@ -117,6 +117,8 @@ emitter.on('routeChange', function (route, actionType) {
 
                 if (units.length && parts.length && crafts.length) {
                     $('#manageFactory #flowBtn').removeClass('disabled');
+                    $('#manageFactory #nonFlowBtn').removeClass('disabled');
+                    $('#manageFactory #togetherBtn').removeClass('disabled');
                 }
             });
 
