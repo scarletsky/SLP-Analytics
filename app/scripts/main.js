@@ -246,7 +246,13 @@ emitter.on('routeChange', function (route, actionType) {
                 slp.nonFlowIntension = nonFlowIntension;
 
                 if (slp.analysisType === 'together') {
-                    $('button[data-route="manageFactory"]').attr('data-route', 'unitRelationTable');
+                    var breads = [
+                        '<li><a href="#" data-route="fromToTable">从至表</a></li>',
+                        '<li><a href="#" data-route="flowIntensionTable">物流强度表</a></li>',
+                        '<li><a href="#" data-route="unitRelationTable">物流相关表</a></li>',
+                    ].join('');
+
+                    $('.breadcrumb li:first').after(breads);
                 }
 
                 if (slp.nonFlowIntension.length) {
@@ -327,8 +333,16 @@ emitter.on('routeChange', function (route, actionType) {
         // 作业单位非物流相关表
         case 'nonFlowRelationTable':
             if (slp.analysisType === 'together') {
+                var breads = [
+                    '<li><a href="#" data-route="fromToTable">从至表</a></li>',
+                    '<li><a href="#" data-route="flowIntensionTable">物流强度表</a></li>',
+                    '<li><a href="#" data-route="unitRelationTable">物流相关表</a></li>',
+                    '<li><a href="#" data-route="nonFlowIntension">相互关系分析</a></li>',
+                ].join('');
                 var confirmWeightBtn = $('<button class="btn btn-primary" data-route="confirmWeight">确定权重</button>');
-                $('button[data-route="nonFlowIntension"]').before(confirmWeightBtn);
+
+                $('.breadcrumb li:first').after(breads);
+                $('#unitRelationTable table').after(confirmWeightBtn);
             }
             thead = tpls.fromToThead(slp.units);
             tbody = tpls.fromToTbody(slp.units, 'dataEmpty');
