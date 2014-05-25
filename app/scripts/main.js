@@ -357,12 +357,26 @@ emitter.on('routeChange', function (route, actionType) {
         case 'calComprehensiveRelation':
             $('#title').text('物流关系与非物流关系的权重为' + slp.weight);
             slp.comprehensiveRelation = utils.calComprehensiveRelation(slp.unitRelation, slp.nonFlowIntension, slp.weight);
+
+            if (slp.weight === '1:0') {
+                $.each(slp.comprehensiveRelation, function (i, obj) {
+                    var target = _.find(slp.unitRelation, {id: obj.pair});
+                    obj.level = target.level;
+                });
+            } else if (slp.weight === '0:1') {
+                $.each(slp.comprehensiveRelation, function (i, obj) {
+                    var target = _.find(slp.nonFlowIntension, {pair: obj.pair});
+                    obj.level = target.level;
+                });
+            }
+
             $.each(slp.comprehensiveRelation, function (i, obj) {
                 var tr = tpls.calComprehensiveRelationTbody(obj.index, obj.pair, obj.flowLevel, obj.flowScore, obj.nonFlowLevel, obj.nonFlowScore, obj.totalScore, obj.level);
                 rows.push(tr);
             });
 
             $('#calComprehensiveRelation table tbody').html(rows);
+
             break;
 
         // 综合相互关系表
