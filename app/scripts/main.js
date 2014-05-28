@@ -253,6 +253,7 @@ emitter.on('routeChange', function (route, actionType) {
                     ].join('');
 
                     $('.breadcrumb li:first').after(breads);
+                    $('.header span').text('2.1 ');
                 }
 
                 if (slp.nonFlowIntension.length) {
@@ -342,6 +343,7 @@ emitter.on('routeChange', function (route, actionType) {
                 var confirmWeightBtn = $('<button class="btn btn-primary" data-route="confirmWeight">确定权重</button>');
 
                 $('.breadcrumb li:first').after(breads);
+                $('.header span').text('2.2 ');
                 $('#unitRelationTable table').after(confirmWeightBtn);
             }
             thead = tpls.fromToThead(slp.units);
