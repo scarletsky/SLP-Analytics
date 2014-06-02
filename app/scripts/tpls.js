@@ -179,11 +179,18 @@ var unitRelationSort = function (data) {
 }
 
 
-var flowIntensionTbody = function (index, id, intension, level) {
+var flowIntensionTbody = function (index, id, intension, level, units) {
+    var sepId = id.split('-');
+    var masterUnit = _.find(units, {id: Number(sepId[0])});
+    var slaveUnit = _.find(units, {id: Number(sepId[1])});
+
     var html = [
         '<tr>',
             '<td>' + index + '</td>',
-            '<td>' + id + '</td>',
+            '<td>',
+                '<a href="#" data-toggle="tooltip" ' + 
+                            'title=\"' + masterUnit.name + ' - ' + slaveUnit.name + '\">' + masterUnit.num + '-' + slaveUnit.num + '</a>',
+            '</td>',
             '<td>' + intension + '</td>',
             '<td>' + level + '</td>',
         '</tr>'

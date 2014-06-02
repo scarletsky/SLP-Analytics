@@ -357,11 +357,12 @@ emitter.on('routeChange', function (route, actionType) {
             var flowIntension = slp.flowIntension = utils.getFlowIntesion(slp.fromToTableData);
 
             $.each(flowIntension, function (i, obj) {
-                var tr = tpls.flowIntensionTbody(i + 1, obj.id, obj.intension, obj.level);
+                var tr = tpls.flowIntensionTbody(i + 1, obj.id, obj.intension, obj.level, slp.units);
                 rows.push(tr);
             });
 
             $('#flowIntensionTable table tbody').html(rows);
+            utils.addTooltipsEffects();
             break;
 
         // 作业单位物流相关表
