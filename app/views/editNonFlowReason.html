@@ -1,0 +1,26 @@
+<form id="editNonFlowReason" role="form" action="">
+    <input type="hidden" name="id">
+    <input type="hidden" name="factoryId">
+    <input type="hidden" name="action">
+    <div class="form-group">
+        <label for="num">序号</label>
+        <input class="form-control"
+               id="num"
+               type="text"
+               name="num"
+               placeholder="请输入原因序号，填写数字即可。">
+    </div>
+
+    <div class="form-group">
+        <label for="reason">详细原因</label>
+        <textarea class="form-control"
+                  id="reason"
+                  name="reason"
+                  rows="3"
+                  placeholder="请输入详细原因"></textarea>
+    </div>
+
+    <button class="btn btn-primary" id="editNonFlowReasonBtn">提交</button>
+    <button class="btn btn-default" data-route="nonFlowReason">返回</button>
+</form>
+

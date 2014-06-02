@@ -41,6 +41,13 @@ CREATE TABLE Nonlogistics(
     factory_id INTEGER,
     pair TEXT,
     level TEXT,
+    reason INTEGER
+);
+
+CREATE TABLE NonlogisticsReason(
+    id INTEGER PRIMARY KEY,
+    factory_id INTEGER,
+    num INTEGER,
     reason TEXT
 );
 
@@ -74,7 +81,27 @@ INSERT INTO Craft(factory_id, part_id, route, carrying, remark) VALUES('1', '2',
 INSERT INTO Craft(factory_id, part_id, route, carrying, remark) VALUES('1', '3', '1,2,4,3,4,6', 1000, '');
 INSERT INTO Craft(factory_id, part_id, route, carrying, remark) VALUES('1', '4', '1,4,5,3,4,6', 800, '');
 INSERT INTO Craft(factory_id, part_id, route, carrying, remark) VALUES('1', '5', '1,4,5,3,4,6', 1400, '');
-INSERT INTO Craft(factory_id, part_id, route, carrying, remark) VALUES('1', '5', '1,2,4', 50, '');
+INSERT INTO Craft(factory_id, part_id, route, carrying, remark) VALUES('1', '6', '1,2,4', 50, '');
 
+INSERT INTO Nonlogistics(factory_id, pair, level, reason) VALUES('1', '1-2', 'A', 1);
+INSERT INTO Nonlogistics(factory_id, pair, level, reason) VALUES('1', '1-3', 'I', 1);
+INSERT INTO Nonlogistics(factory_id, pair, level, reason) VALUES('1', '1-4', 'E', 2);
+INSERT INTO Nonlogistics(factory_id, pair, level, reason) VALUES('1', '1-5', 'U', 3);
+INSERT INTO Nonlogistics(factory_id, pair, level, reason) VALUES('1', '1-6', 'U', 3);
+INSERT INTO Nonlogistics(factory_id, pair, level, reason) VALUES('1', '2-3', 'U', 4);
+INSERT INTO Nonlogistics(factory_id, pair, level, reason) VALUES('1', '2-4', 'E', 4);
+INSERT INTO Nonlogistics(factory_id, pair, level, reason) VALUES('1', '2-5', 'U', 2);
+INSERT INTO Nonlogistics(factory_id, pair, level, reason) VALUES('1', '2-6', 'U', 1);
+INSERT INTO Nonlogistics(factory_id, pair, level, reason) VALUES('1', '3-4', 'I', 4);
+INSERT INTO Nonlogistics(factory_id, pair, level, reason) VALUES('1', '3-5', 'U', 3);
+INSERT INTO Nonlogistics(factory_id, pair, level, reason) VALUES('1', '3-6', 'U', 3);
+INSERT INTO Nonlogistics(factory_id, pair, level, reason) VALUES('1', '4-5', 'E', 4);
+INSERT INTO Nonlogistics(factory_id, pair, level, reason) VALUES('1', '4-6', 'E', 5);
+INSERT INTO Nonlogistics(factory_id, pair, level, reason) VALUES('1', '5-6', 'I', 1);
 
+INSERT INTO NonlogisticsReason(factory_id, num, reason) VALUES('1', 1, '物料搬运');
+INSERT INTO NonlogisticsReason(factory_id, num, reason) VALUES('1', 2, '管理方便');
+INSERT INTO NonlogisticsReason(factory_id, num, reason) VALUES('1', 3, '振动、噪声、烟尘');
+INSERT INTO NonlogisticsReason(factory_id, num, reason) VALUES('1', 4, '工作流程的连续性');
+INSERT INTO NonlogisticsReason(factory_id, num, reason) VALUES('1', 5, '安全及污染');
 

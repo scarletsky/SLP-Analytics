@@ -94,6 +94,27 @@ var craft = function (id, part_id, name, route, carrying, remark) {
     return html.join('');
 }
 
+var nonFlowReason = function (id, num, reason) {
+    var html = [
+        '<tr data-klass="reason">' +
+            '<td class="text-center" data-klass="id">' + id + '</td>',
+            '<td class="text-center" data-klass="num">' + num + '</td>',
+            '<td class="text-center" data-klass="reason">' + reason + '</td>',
+            '<td class="text-center">',
+                '<button class="btn btn-sm btn-default u-marginRs" data-action-type="edit" data-route="editNonFlowReason">',
+                    '编辑',
+                '</button>',
+
+                '<button class="btn btn-sm btn-danger u-marginRs" data-action-type="delete" data-action="deleteReason">',
+                    '删除',
+                '</button>',
+            '</td>',
+        '</tr>',
+    ]
+
+    return html.join('');
+}
+
 var craftPartOption = function (id, name) {
     return '<option value=\"' + id + '\">' + name + '</option>'
 }
@@ -171,7 +192,17 @@ var flowIntensionTbody = function (index, id, intension, level) {
     return html.join('');
 }
 
-var nonFLowIntensionTbody = function (index, masterUnit, slaveUnit) {
+var reasonOptions = function (reasonNum, reasons) {
+    var html = '';
+    $.each(reasons, function (i, obj) {
+        var isSelected = parseInt(reasonNum) === parseInt(obj.num) ? 'selected="selected"' : '';
+        html += '<option value="' + obj.num + '" '+ isSelected + '">' + obj.reason + '</option>';
+    });
+
+    return html;
+}
+
+var nonFLowIntensionTbody = function (index, masterUnit, slaveUnit, reasons) {
     var html = [
         '<tr>',
             '<td></td>',
@@ -180,15 +211,30 @@ var nonFLowIntensionTbody = function (index, masterUnit, slaveUnit) {
                 '<a href="#" data-toggle="tooltip" ' + 
                             'title=\"' + masterUnit.name + ' - ' + slaveUnit.name + '\">' + masterUnit.num + '-' + slaveUnit.num + '</a>',
             '</td>',
-            '<td contenteditable="true"></td>',
-            '<td contenteditable="true"></td>',
+            '<td>',
+                '<select class="form-control">',
+                    '<option val="A">A</option>',
+                    '<option val="E">E</option>',
+                    '<option val="I">I</option>',
+                    '<option val="O">O</option>',
+                    '<option val="U">U</option>',
+                    '<option val="X">X</option>',
+                '</select>',
+            '</td>',
+            '<td>',
+                '<select class="form-control">',
+                '</select>',
+            '</td>',
         '</tr>'
     ];
+
+    var options = reasonOptions(null, reasons);
+    html.splice(18, 0, options);
 
     return html.join('');
 }
 
-var nonFLowIntensionTbodyX = function (id, index, pair, level, reason, units) {
+var nonFLowIntensionTbodyX = function (id, index, pair, level, reasonNum, units, reasons) {
     var sepId = pair.split('-');
     var masterUnit = _.find(units, {id: Number(sepId[0])});
     var slaveUnit = _.find(units, {id: Number(sepId[1])});
@@ -201,10 +247,51 @@ var nonFLowIntensionTbodyX = function (id, index, pair, level, reason, units) {
                 '<a href="#" data-toggle="tooltip" ' + 
                             'title=\"' + masterUnit.name + ' - ' + slaveUnit.name + '\">' + masterUnit.num + '-' + slaveUnit.num + '</a>',
             '</td>',
-            '<td contenteditable="true">' + level + '</td>',
-            '<td contenteditable="true">' + reason + '</td>',
+            '<td>',
+                '<select class="form-control">',
+                    '<option val="A">A</option>',
+                    '<option val="E">E</option>',
+                    '<option val="I">I</option>',
+                    '<option val="O">O</option>',
+                    '<option val="U">U</option>',
+                    '<option val="X">X</option>',
+                '</select>',
+            '</td>',
+            '<td>',
+                '<select class="form-control">',
+                '</select>',
+            '</td>',
         '</tr>'
     ];
+
+    var options = reasonOptions(reasonNum, reasons);
+    html.splice(18, 0, options);
+
+    var index;
+    switch (level) {
+        case 'A':
+            index = 8;
+            break;
+        case 'E':
+            index = 9;
+            break;
+        case 'I':
+            index = 10;
+            break;
+        case 'O':
+            index = 11;
+            break;
+        case 'U':
+            index = 12;
+            break;
+        case 'X':
+            index = 13;
+            break;
+    }
+
+    var ex = html[index].substring(0, 15);
+    var ext = html[index].substring(15);
+    html[index] = ex + 'selected="true"' + ext;
 
     return html.join('');
 }
@@ -261,6 +348,7 @@ exports.unit = unit;
 exports.part = part;
 exports.craft = craft;
 exports.craftPartOption = craftPartOption;
+exports.nonFlowReason = nonFlowReason;
 exports.fromToThead = fromToThead;
 exports.fromToTbody = fromToTbody;
 exports.flowIntensionTbody = flowIntensionTbody;
